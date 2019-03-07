@@ -84,7 +84,7 @@ public class RPXFileSystem implements GFileSystem {
 	public void mount(TaskMonitor monitor) {
 		monitor.setMessage("Opening " + RPXFileSystem.class.getSimpleName() + "...");
 		try {
-			ElfData data = convertRPX();
+			ElfData data = convertRPX(provider);
 			fsih.storeFile("converted.elf", 0, false, data.elf_size, data);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -96,8 +96,8 @@ public class RPXFileSystem implements GFileSystem {
 	 * 
 	 * @return
 	 */
-	public ElfData convertRPX() throws ElfException, IOException, DataFormatException {
-		ElfHeader elfFile = ElfHeader.createElfHeader(RethrowContinuesFactory.INSTANCE, provider);
+	public static ElfData convertRPX(ByteProvider bProvider) throws ElfException, IOException, DataFormatException {
+		ElfHeader elfFile = ElfHeader.createElfHeader(RethrowContinuesFactory.INSTANCE, bProvider);
 		elfFile.parse();
 
 		long shdr_elf_offset = elfFile.e_ehsize() & 0xFFFFFFFF;
@@ -174,7 +174,7 @@ public class RPXFileSystem implements GFileSystem {
 
 		byte[] dataArray = buffer.array();
 
-		return new ElfData(dataArray, (int) provider.length());
+		return new ElfData(dataArray, (int) bProvider.length());
 	}
 
 	private static ByteBuffer checkBuffer(ByteBuffer buffer, long newEnd) {
