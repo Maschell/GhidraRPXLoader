@@ -58,6 +58,9 @@ public class RPXFileSystem implements GFileSystem {
 	public static final int SHF_RPL_ZLIB = 0x08000000;
 	public static final int SHT_NOBITS = 0x00000008;
 
+	public static final int SHT_RPL_CRCS = 0x80000003;
+	public static final int SHT_RPL_FILEINFO = 0x80000004;
+
 	private final FSRLRoot fsFSRL;
 	private FileSystemIndexHelper<ElfData> fsih;
 	private FileSystemRefManager refManager = new FileSystemRefManager(this);
@@ -100,11 +103,21 @@ public class RPXFileSystem implements GFileSystem {
 		ElfHeader elfFile = ElfHeader.createElfHeader(RethrowContinuesFactory.INSTANCE, bProvider);
 		elfFile.parse();
 
-		long shdr_elf_offset = elfFile.e_ehsize() & 0xFFFFFFFF;
-		long shdr_data_elf_offset = shdr_elf_offset + elfFile.e_shnum() * elfFile.e_shentsize();
-
 		ByteBuffer buffer = ByteBuffer.allocate(0);
+
+		int section_count = 0;
 		for (ElfSectionHeader h : elfFile.getSections()) {
+			if (h.getType() == SHT_RPL_CRCS || h.getType() == SHT_RPL_FILEINFO) {
+				continue;
+			}
+			section_count++;
+		}
+
+		long shdr_elf_offset = elfFile.e_ehsize() & 0xFFFFFFFF;
+		long shdr_data_elf_offset = shdr_elf_offset + section_count * elfFile.e_shentsize();
+
+		for (ElfSectionHeader h : elfFile.getSections()) {
+
 			long curSize = h.getSize();
 			long flags = h.getFlags();
 			long offset = h.getOffset();
@@ -130,8 +143,16 @@ public class RPXFileSystem implements GFileSystem {
 					}
 					long newEnd = shdr_data_elf_offset + curSize;
 
+					if (h.getType() == SHT_RPL_CRCS || h.getType() == SHT_RPL_FILEINFO) {
+						System.out.println("Skip special section " + h.getTypeAsString());
+						continue;
+					}
+
+					System.out.println("Saving " + h.getTypeAsString());
+
 					buffer = checkBuffer(buffer, newEnd);
 					buffer.position((int) shdr_data_elf_offset);
+					System.out.println("Write data " + String.format("%08X", shdr_data_elf_offset));
 					buffer.put(data);
 					offset = shdr_data_elf_offset;
 					shdr_data_elf_offset += curSize;
