@@ -59,6 +59,8 @@ public class RPXFileSystem implements GFileSystem {
 	public static final int SHF_RPL_ZLIB = 0x08000000;
 	public static final int SHT_NOBITS = 0x00000008;
 
+	public static final int SHT_RPL_EXPORTS = 0x80000001;
+	public static final int SHT_RPL_IMPORTS = 0x80000002;
 	public static final int SHT_RPL_CRCS = 0x80000003;
 	public static final int SHT_RPL_FILEINFO = 0x80000004;
 
