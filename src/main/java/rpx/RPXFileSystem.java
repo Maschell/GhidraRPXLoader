@@ -34,6 +34,7 @@ import ghidra.app.util.bin.ByteProvider;
 import ghidra.app.util.bin.format.elf.ElfException;
 import ghidra.app.util.bin.format.elf.ElfHeader;
 import ghidra.app.util.bin.format.elf.ElfSectionHeader;
+import ghidra.app.util.bin.format.elf.ElfSectionHeaderConstants;
 import ghidra.formats.gfilesystem.FSRL;
 import ghidra.formats.gfilesystem.FSRLRoot;
 import ghidra.formats.gfilesystem.FSUtilities;
@@ -158,13 +159,41 @@ public class RPXFileSystem implements GFileSystem {
 					shdr_data_elf_offset += curSize;
 				}
 			}
+
+			// Hacky way to fix import relocations
+			if (h.getType() == ElfSectionHeaderConstants.SHT_SYMTAB) {
+				int symbolCount = (int) ((int) (curSize) / h.getEntrySize());
+				long entryPos = 0;
+				for (int i = 0; i < symbolCount; i++) {
+					long test_offset = (int) (offset + entryPos + 4);
+					buffer.position((int) test_offset);
+					int val = buffer.getInt();
+					
+					if ((val & 0xF0000000L) == 0xC0000000L) {
+						long fixedAddress = val - 0xC0000000L + 0x01000000L;
+						buffer.position((int) test_offset);
+						buffer.putInt((int) fixedAddress);
+					}
+					entryPos += h.getEntrySize();
+				}
+			}
+
 			buffer = checkBuffer(buffer, shdr_elf_offset + 0x28);
 
 			buffer.position((int) shdr_elf_offset);
+			System.out.println("Write header " + String.format("%08X", shdr_elf_offset));
 			buffer.putInt(h.getName());
 			buffer.putInt(h.getType());
 			buffer.putInt((int) flags);
-			buffer.putInt((int) h.getAddress());
+
+			// Hacky way to fix import relocations
+			if ((h.getAddress() & 0xF0000000L) == 0xC0000000L) {
+				long fixedAddress = h.getAddress() - 0xC0000000L + 0x01000000L;
+				buffer.putInt((int) fixedAddress);
+			} else {
+				buffer.putInt((int) h.getAddress());
+			}
+			
 			buffer.putInt((int) offset);
 			buffer.putInt((int) curSize);
 			buffer.putInt(h.getLink());
