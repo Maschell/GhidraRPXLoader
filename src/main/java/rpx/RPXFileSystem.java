@@ -124,7 +124,7 @@ public class RPXFileSystem implements GFileSystem {
 
 						inflater.end();
 
-						curSize = section_size_inflated;
+						curSize = section_size_inflated & ~0x3;
 						flags &= ~SHF_RPL_ZLIB;
 						data = decompressed;
 					}
