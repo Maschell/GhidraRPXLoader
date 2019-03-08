@@ -31,6 +31,7 @@ import org.apache.commons.collections4.map.HashedMap;
 
 import generic.continues.RethrowContinuesFactory;
 import ghidra.app.util.bin.ByteProvider;
+import ghidra.app.util.bin.format.elf.ElfConstants;
 import ghidra.app.util.bin.format.elf.ElfException;
 import ghidra.app.util.bin.format.elf.ElfHeader;
 import ghidra.app.util.bin.format.elf.ElfSectionHeader;
@@ -210,7 +211,7 @@ public class RPXFileSystem implements GFileSystem {
 		buffer.position(0);
 		buffer.put(RPX_MAGIC);
 		buffer.position(0x10);
-		buffer.putShort((short) 0x02); // e.e_type());
+		buffer.putShort(ElfConstants.ET_EXEC); // e.e_type());
 		buffer.putShort(elfFile.e_machine());
 		buffer.putInt(elfFile.e_version());
 		buffer.putInt((int) elfFile.e_entry());
