@@ -1,0 +1,5 @@
+<opinions>
+    <constraint loader="Wii U Executable (RPX/RPL)" compilerSpecID="default">
+        <constraint primary="0"   processor="PowerPC" endian="big" size="32" />
+    </constraint>   
+</opinions>
