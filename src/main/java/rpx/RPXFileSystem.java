@@ -113,19 +113,10 @@ public class RPXFileSystem implements GFileSystem {
 
 		ByteBuffer buffer = ByteBuffer.allocate(0);
 
-		int section_count = 0;
-		for (ElfSectionHeader h : elfFile.getSections()) {
-			if (h.getType() == SHT_RPL_CRCS || h.getType() == SHT_RPL_FILEINFO) {
-				continue;
-			}
-			section_count++;
-		}
-
 		long shdr_elf_offset = elfFile.e_ehsize() & 0xFFFFFFFF;
-		long shdr_data_elf_offset = shdr_elf_offset + section_count * elfFile.e_shentsize();
+		long shdr_data_elf_offset = shdr_elf_offset + elfFile.e_shnum() * elfFile.e_shentsize();
 
 		for (ElfSectionHeader h : elfFile.getSections()) {
-
 			monitor.checkCanceled();
 			long curSize = h.getSize();
 			long flags = h.getFlags();
@@ -153,16 +144,8 @@ public class RPXFileSystem implements GFileSystem {
 					}
 					long newEnd = shdr_data_elf_offset + curSize;
 
-					if (h.getType() == SHT_RPL_CRCS || h.getType() == SHT_RPL_FILEINFO) {
-						System.out.println("Skip special section " + h.getTypeAsString());
-						continue;
-					}
-
-					System.out.println("Saving " + h.getTypeAsString());
-
 					buffer = checkBuffer(buffer, newEnd);
 					buffer.position((int) shdr_data_elf_offset);
-					System.out.println("Write data " + String.format("%08X", shdr_data_elf_offset));
 					buffer.put(data);
 					offset = shdr_data_elf_offset;
 					shdr_data_elf_offset += curSize;
@@ -179,7 +162,7 @@ public class RPXFileSystem implements GFileSystem {
 					long test_offset = (int) (offset + entryPos + 4);
 					buffer.position((int) test_offset);
 					int val = buffer.getInt();
-					
+
 					if ((val & 0xF0000000L) == 0xC0000000L) {
 						long fixedAddress = val - 0xC0000000L + 0x01000000L;
 						buffer.position((int) test_offset);
@@ -192,10 +175,16 @@ public class RPXFileSystem implements GFileSystem {
 			buffer = checkBuffer(buffer, shdr_elf_offset + 0x28);
 
 			monitor.setMessage("Converting section " + h.getTypeAsString());
+
 			buffer.position((int) shdr_elf_offset);
 			System.out.println("Write header " + String.format("%08X", shdr_elf_offset));
 			buffer.putInt(h.getName());
-			buffer.putInt(h.getType());
+			if (h.getType() == SHT_RPL_CRCS || h.getType() == SHT_RPL_FILEINFO || h.getType() == SHT_RPL_EXPORTS
+					|| h.getType() == SHT_RPL_IMPORTS) {
+				buffer.putInt(ElfSectionHeaderConstants.SHT_NULL);
+			} else {
+				buffer.putInt(h.getType());
+			}
 			buffer.putInt((int) flags);
 
 			// Hacky way to fix import relocations
@@ -205,7 +194,7 @@ public class RPXFileSystem implements GFileSystem {
 			} else {
 				buffer.putInt((int) h.getAddress());
 			}
-			
+
 			buffer.putInt((int) offset);
 			buffer.putInt((int) curSize);
 			buffer.putInt(h.getLink());
@@ -214,10 +203,10 @@ public class RPXFileSystem implements GFileSystem {
 			buffer.putInt((int) h.getEntrySize());
 
 			shdr_elf_offset += 0x28;
-
 		}
 
 		monitor.setMessage("Create new ELF header");
+
 		buffer.position(0);
 		buffer.put(RPX_MAGIC);
 		buffer.position(0x10);
