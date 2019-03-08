@@ -138,7 +138,8 @@ public class RPXFileSystem implements GFileSystem {
 
 						inflater.end();
 
-						curSize = section_size_inflated & ~0x3;
+						// Is this alignment really necessary?
+						curSize = (section_size_inflated + 0x03) & ~0x3;
 						flags &= ~SHF_RPL_ZLIB;
 						data = decompressed;
 					}
