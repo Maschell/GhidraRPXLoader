@@ -91,7 +91,7 @@ public class RPXFileSystem implements GFileSystem {
 	public void mount(TaskMonitor monitor) {
 		monitor.setMessage("Opening " + RPXFileSystem.class.getSimpleName() + "...");
 		try {
-			ElfData data = convertRPX(provider);
+			ElfData data = convertRPX(provider, monitor);
 			fsih.storeFile("converted.elf", 0, false, data.elf_size, data);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,9 +101,13 @@ public class RPXFileSystem implements GFileSystem {
 	/**
 	 * Based on https://github.com/Relys/rpl2elf/blob/master/rpl2elf.c
 	 * 
+	 * @param monitor
+	 * 
 	 * @return
+	 * @throws CancelledException
 	 */
-	public static ElfData convertRPX(ByteProvider bProvider) throws ElfException, IOException, DataFormatException {
+	public static ElfData convertRPX(ByteProvider bProvider, TaskMonitor monitor)
+			throws ElfException, IOException, DataFormatException, CancelledException {
 		ElfHeader elfFile = ElfHeader.createElfHeader(RethrowContinuesFactory.INSTANCE, bProvider);
 		elfFile.parse();
 
@@ -122,6 +126,7 @@ public class RPXFileSystem implements GFileSystem {
 
 		for (ElfSectionHeader h : elfFile.getSections()) {
 
+			monitor.checkCanceled();
 			long curSize = h.getSize();
 			long flags = h.getFlags();
 			long offset = h.getOffset();
@@ -131,6 +136,7 @@ public class RPXFileSystem implements GFileSystem {
 					byte[] data = h.getData();
 
 					if ((flags & SHF_RPL_ZLIB) == SHF_RPL_ZLIB) {
+						monitor.setMessage("Decompressing section " + h.getTypeAsString());
 						long section_size_inflated = ByteBuffer.wrap(Arrays.copyOf(data, 4)).getInt() & 0xFFFFFFFF;
 						Inflater inflater = new Inflater();
 						inflater.setInput(data, 4, (int) h.getSize() - 4); // the first byte is the size
@@ -165,9 +171,11 @@ public class RPXFileSystem implements GFileSystem {
 
 			// Hacky way to fix import relocations
 			if (h.getType() == ElfSectionHeaderConstants.SHT_SYMTAB) {
+				monitor.setMessage("Fix import relocations " + h.getTypeAsString());
 				int symbolCount = (int) ((int) (curSize) / h.getEntrySize());
 				long entryPos = 0;
 				for (int i = 0; i < symbolCount; i++) {
+					monitor.checkCanceled();
 					long test_offset = (int) (offset + entryPos + 4);
 					buffer.position((int) test_offset);
 					int val = buffer.getInt();
@@ -183,6 +191,7 @@ public class RPXFileSystem implements GFileSystem {
 
 			buffer = checkBuffer(buffer, shdr_elf_offset + 0x28);
 
+			monitor.setMessage("Converting section " + h.getTypeAsString());
 			buffer.position((int) shdr_elf_offset);
 			System.out.println("Write header " + String.format("%08X", shdr_elf_offset));
 			buffer.putInt(h.getName());
@@ -208,6 +217,7 @@ public class RPXFileSystem implements GFileSystem {
 
 		}
 
+		monitor.setMessage("Create new ELF header");
 		buffer.position(0);
 		buffer.put(RPX_MAGIC);
 		buffer.position(0x10);
