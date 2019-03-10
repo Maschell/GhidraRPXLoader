@@ -113,8 +113,7 @@ public class RPXUtils {
 			buffer.position((int) shdr_elf_offset);
 			System.out.println("Write header " + String.format("%08X", shdr_elf_offset));
 			buffer.putInt(h.getName());
-			if (h.getType() == SHT_RPL_CRCS || h.getType() == SHT_RPL_FILEINFO || h.getType() == SHT_RPL_EXPORTS
-					|| h.getType() == SHT_RPL_IMPORTS) {
+			if (h.getType() == SHT_RPL_CRCS || h.getType() == SHT_RPL_FILEINFO) {
 				buffer.putInt(ElfSectionHeaderConstants.SHT_NULL);
 			} else {
 				buffer.putInt(h.getType());
