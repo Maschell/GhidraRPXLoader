@@ -21,11 +21,12 @@ import ghidra.app.util.bin.format.elf.ElfSymbol;
 import ghidra.app.util.importer.MemoryConflictHandler;
 import ghidra.app.util.importer.MessageLog;
 import ghidra.app.util.importer.MessageLogContinuesFactory;
+import ghidra.program.database.external.ExternalManagerDB;
 import ghidra.program.model.address.Address;
 import ghidra.program.model.address.AddressSpace;
 import ghidra.program.model.listing.Program;
+import ghidra.program.model.symbol.ExternalLocation;
 import ghidra.program.model.symbol.RefType;
-import ghidra.program.model.symbol.Reference;
 import ghidra.program.model.symbol.SourceType;
 import ghidra.util.exception.CancelledException;
 import ghidra.util.exception.DuplicateNameException;
@@ -103,9 +104,26 @@ public class RPXLoader extends ElfLoader {
 						}
 
 						Address addr = aspace.getAddress(offset);
-						Reference r = program.getReferenceManager().addExternalReference(addr, rplName,
-								symbol.getNameAsString(), aspace.getAddress(0), SourceType.IMPORTED, 1, RefType.DATA);
-						program.getReferenceManager().setPrimary(r, true);
+						boolean isData = section.getNameAsString().startsWith(".d");
+
+						ExternalManagerDB em = (ExternalManagerDB) program.getExternalManager();
+						ExternalLocation location;
+						if (!isData) {
+							location = em.addExtFunction(rplName, symbol.getNameAsString(), null, SourceType.IMPORTED);
+						} else {
+							location = em.addExtLocation(rplName, symbol.getNameAsString(), null, SourceType.IMPORTED);
+						}
+
+						// We need this to have working references. (=> clicking on Imports, Show
+						// Referenences to.. is working)
+						// Setting the RefType.INVALID works for some reason!
+						// If the set it to DATA, everything is treated like DATA, and if we use
+						// something like "UNCONDITIONAL_CALL" for functions
+						// then decompiler doesn't get the right function names anymore.
+						program.getReferenceManager().addExternalReference(addr, 1, location, SourceType.USER_DEFINED,
+								RefType.INVALID);
+
+						// Add a comment to easily see from which rpl the function is coming.
 						program.getListing().setComment(addr, 0, rplName + "::" + symbol.getNameAsString());
 					}
 				}
