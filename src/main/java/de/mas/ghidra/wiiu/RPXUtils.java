@@ -37,6 +37,8 @@ public class RPXUtils {
 		long shdr_elf_offset = elfFile.e_ehsize() & 0xFFFFFFFF;
 		long shdr_data_elf_offset = shdr_elf_offset + elfFile.e_shnum() * elfFile.e_shentsize();
 
+		long curSymbolAddress = 0x01000000;
+
 		for (ElfSectionHeader h : elfFile.getSections()) {
 			monitor.checkCanceled();
 			long curSize = h.getSize();
@@ -82,21 +84,23 @@ public class RPXUtils {
 				}
 			}
 
-			// Hacky way to fix import relocations
-			if (h.getType() == ElfSectionHeaderConstants.SHT_SYMTAB) {
-				monitor.setMessage("Fix import relocations " + h.getTypeAsString());
+			if (h.getType() == ElfSectionHeaderConstants.SHT_SYMTAB
+					|| h.getType() == ElfSectionHeaderConstants.SHT_DYNSYM) {
+				monitor.setMessage("Fix import/exports" + h.getTypeAsString());
 				int symbolCount = (int) ((int) (curSize) / h.getEntrySize());
 				long entryPos = 0;
 				for (int i = 0; i < symbolCount; i++) {
 					monitor.checkCanceled();
-					long test_offset = (int) (offset + entryPos + 4);
-					buffer.position((int) test_offset);
-					int val = buffer.getInt();
+					long entry_offset = (int) (offset + entryPos);
 
-					if ((val & 0xF0000000L) == 0xC0000000L) {
-						long fixedAddress = val - 0xC0000000L + 0x01000000L;
-						buffer.position((int) test_offset);
-						buffer.putInt((int) fixedAddress);
+					int sectionIndex = buffer.getShort((int) entry_offset + 14) & 0xFFFF;
+					int type = elfFile.getSections()[sectionIndex].getType();
+
+					if (type == SHT_RPL_IMPORTS) {
+						// Set Value to 0
+						buffer.position((int) (entry_offset + 4));
+						curSymbolAddress += 4;
+						buffer.putInt((int) curSymbolAddress);
 					}
 					entryPos += h.getEntrySize();
 				}
@@ -118,8 +122,8 @@ public class RPXUtils {
 			buffer.putInt((int) flags);
 
 			// Hacky way to fix import relocations
-			if ((h.getAddress() & 0xF0000000L) == 0xC0000000L) {
-				long fixedAddress = h.getAddress() - 0xC0000000L + 0x01000000L;
+			if (h.getType() == SHT_RPL_IMPORTS) {
+				long fixedAddress = 0;
 				buffer.putInt((int) fixedAddress);
 			} else {
 				buffer.putInt((int) h.getAddress());
