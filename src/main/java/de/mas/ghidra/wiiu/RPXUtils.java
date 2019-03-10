@@ -60,8 +60,6 @@ public class RPXUtils {
 			}
 		}
 
-		long curSymbolAddress = 0x01000000;
-
 		for (ElfSectionHeader h : elfFile.getSections()) {
 			monitor.checkCanceled();
 			long curSize = h.getSize();
@@ -72,8 +70,7 @@ public class RPXUtils {
 			if (offset != 0) {
 				if ((flags & SHT_NOBITS) != SHT_NOBITS) {
 					byte[] data = h.getData();
-					if (h.getType() == SHT_RPL_CRCS || h.getType() == SHT_RPL_EXPORTS || h.getType() == SHT_RPL_IMPORTS
-							|| h.getType() == SHT_RPL_FILEINFO) {
+					if (h.getType() == SHT_RPL_CRCS || h.getType() == SHT_RPL_FILEINFO) {
 						data = new byte[0];
 						curSize = 0;
 					} else {
@@ -125,17 +122,15 @@ public class RPXUtils {
 						String symbolSectionName = Utils.stringFromStringTable(sh_str_sh_data, curSection.getName());
 						buffer.position((int) (entry_offset + 4));
 						// Set Value to a custom symbol address
-						curSymbolAddress += 4;
-						buffer.putInt((int) curSymbolAddress);
 						buffer.position((int) (entry_offset + 12));
 
-						// Change type to LOCAL so it won't be in the export list.
 						// Force FUNC type so the name will be used in the decompiler.
 						byte symbolType = ElfSymbol.STT_FUNC;
+						// But change to OBJECT for data imports
 						if (symbolSectionName.startsWith(".d")) {
 							symbolType = ElfSymbol.STT_OBJECT;
 						}
-
+						// Change type to LOCAL so it won't be in the export list.
 						buffer.put((byte) ((ElfSymbol.STB_LOCAL << 4) | symbolType)); // 12
 					}
 					entryPos += h.getEntrySize();
@@ -155,13 +150,7 @@ public class RPXUtils {
 			}
 			buffer.putInt((int) flags);
 
-			// Hacky way to fix import relocations
-			if (h.getType() == SHT_RPL_IMPORTS) {
-				buffer.putInt(0);
-			} else {
-				buffer.putInt((int) h.getAddress());
-			}
-
+			buffer.putInt((int) h.getAddress());
 			buffer.putInt((int) offset);
 			buffer.putInt((int) curSize);
 			buffer.putInt(h.getLink());

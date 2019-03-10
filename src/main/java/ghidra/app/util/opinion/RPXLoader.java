@@ -69,6 +69,8 @@ public class RPXLoader extends ElfLoader {
 		return 0;
 	}
 
+	// public static final int R_PPC_REL24 = 10;
+
 	@Override
 	public void load(ByteProvider provider, LoadSpec loadSpec, List<Option> options, Program program,
 			MemoryConflictHandler handler, TaskMonitor monitor, MessageLog log) throws IOException {
@@ -108,11 +110,20 @@ public class RPXLoader extends ElfLoader {
 
 						ExternalManagerDB em = (ExternalManagerDB) program.getExternalManager();
 						ExternalLocation location;
+						RefType type = RefType.UNCONDITIONAL_CALL;
 						if (!isData) {
 							location = em.addExtFunction(rplName, symbol.getNameAsString(), null, SourceType.IMPORTED);
 						} else {
+							type = RefType.DATA;
 							location = em.addExtLocation(rplName, symbol.getNameAsString(), null, SourceType.IMPORTED);
 						}
+
+						// Attempt to remove to auto analyzed memory reference that's created due to the
+						// relocation.
+						// if (reloc.getType() == R_PPC_REL24) {
+						// Relocation r = program.getRelocationTable().getRelocation(addr);
+						// program.getRelocationTable().remove(r);
+						// }
 
 						// We need this to have working references. (=> clicking on Imports, Show
 						// Referenences to.. is working)
@@ -120,8 +131,13 @@ public class RPXLoader extends ElfLoader {
 						// If the set it to DATA, everything is treated like DATA, and if we use
 						// something like "UNCONDITIONAL_CALL" for functions
 						// then decompiler doesn't get the right function names anymore.
-						program.getReferenceManager().addExternalReference(addr, 1, location, SourceType.USER_DEFINED,
+
+						program.getReferenceManager().addExternalReference(addr, 1, location, SourceType.IMPORTED,
 								RefType.INVALID);
+						// force the memory reference to the target address, even if the referenced
+						// address is too far away!
+						program.getReferenceManager().addMemoryReference(addr, aspace.getAddress(symbol.getValue()),
+								type, SourceType.IMPORTED, 0);
 
 						// Add a comment to easily see from which rpl the function is coming.
 						program.getListing().setComment(addr, 0, rplName + "::" + symbol.getNameAsString());
