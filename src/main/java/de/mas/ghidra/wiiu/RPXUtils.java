@@ -78,7 +78,9 @@ public class RPXUtils {
 						curSize = 0;
 					} else {
 						if ((flags & SHF_RPL_ZLIB) == SHF_RPL_ZLIB) {
-							monitor.setMessage("Decompressing section " + h.getTypeAsString());
+							Utils.logWrapper(
+									"Decompressing section " + Utils.stringFromStringTable(sh_str_sh_data, h.getName()),
+									monitor);
 							long section_size_inflated = ByteBuffer.wrap(Arrays.copyOf(data, 4)).getInt() & 0xFFFFFFFF;
 							Inflater inflater = new Inflater();
 							inflater.setInput(data, 4, (int) h.getSize() - 4); // the first byte is the size
@@ -108,7 +110,7 @@ public class RPXUtils {
 
 			if (h.getType() == ElfSectionHeaderConstants.SHT_SYMTAB
 					|| h.getType() == ElfSectionHeaderConstants.SHT_DYNSYM) {
-				monitor.setMessage("Fix import/exports" + h.getTypeAsString());
+				Utils.logWrapper("Fix imports for section " + sectionName + " (" + h.getTypeAsString() + ")", monitor);
 				int symbolCount = (int) ((int) (curSize) / h.getEntrySize());
 				long entryPos = 0;
 				for (int i = 0; i < symbolCount; i++) {
@@ -134,10 +136,9 @@ public class RPXUtils {
 
 			buffer = Utils.checkAndGrowByteBuffer(buffer, shdr_elf_offset + 0x28);
 
-			monitor.setMessage("Converting section " + h.getTypeAsString());
+			Utils.logWrapper("Converting section " + sectionName + " (" + h.getTypeAsString() + ")", monitor);
 
 			buffer.position((int) shdr_elf_offset);
-			System.out.println("Write header " + String.format("%08X", shdr_elf_offset));
 			buffer.putInt(h.getName());
 			if (h.getType() == SHT_RPL_CRCS || h.getType() == SHT_RPL_FILEINFO) {
 				buffer.putInt(ElfSectionHeaderConstants.SHT_NULL);
@@ -165,7 +166,7 @@ public class RPXUtils {
 			shdr_elf_offset += 0x28;
 		}
 
-		monitor.setMessage("Create new ELF header");
+		Utils.logWrapper("Create new ELF header", monitor);
 
 		buffer = Utils.checkAndGrowByteBuffer(buffer, 36);
 

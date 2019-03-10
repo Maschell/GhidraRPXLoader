@@ -2,6 +2,8 @@ package de.mas.ghidra.utils;
 
 import java.nio.ByteBuffer;
 
+import ghidra.util.task.TaskMonitor;
+
 public class Utils {
 	private Utils() {
 	}
@@ -38,4 +40,12 @@ public class Utils {
 
 		return result.toString();
 	}
+
+	public static void logWrapper(String msg, TaskMonitor monitor) {
+		if (monitor != null) {
+			monitor.setMessage(msg);
+		}
+		System.out.println(msg);
+	}
+
 }
