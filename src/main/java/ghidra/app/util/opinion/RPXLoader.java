@@ -74,7 +74,9 @@ public class RPXLoader extends ElfLoader {
 
 		try {
 			GenericFactory factory = MessageLogContinuesFactory.create(log);
+
 			byte[] data = RPXUtils.convertRPX(provider, monitor);
+
 			ElfHeader elf = ElfHeader.createElfHeader(factory, new ByteArrayProvider(data));
 
 			ElfProgramBuilder.loadElf(elf, program, options, log, handler, monitor);
@@ -102,8 +104,7 @@ public class RPXLoader extends ElfLoader {
 
 						Address addr = aspace.getAddress(offset);
 						Reference r = program.getReferenceManager().addExternalReference(addr, rplName,
-								symbol.getNameAsString(), aspace.getAddress(0), SourceType.USER_DEFINED, 1,
-								RefType.DATA);
+								symbol.getNameAsString(), aspace.getAddress(0), SourceType.IMPORTED, 1, RefType.DATA);
 						program.getReferenceManager().setPrimary(r, true);
 						program.getListing().setComment(addr, 0, rplName + "::" + symbol.getNameAsString());
 					}

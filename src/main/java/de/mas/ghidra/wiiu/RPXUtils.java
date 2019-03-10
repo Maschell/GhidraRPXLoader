@@ -14,6 +14,7 @@ import ghidra.app.util.bin.format.elf.ElfException;
 import ghidra.app.util.bin.format.elf.ElfHeader;
 import ghidra.app.util.bin.format.elf.ElfSectionHeader;
 import ghidra.app.util.bin.format.elf.ElfSectionHeaderConstants;
+import ghidra.app.util.bin.format.elf.ElfSymbol;
 import ghidra.util.exception.CancelledException;
 import ghidra.util.task.TaskMonitor;
 
@@ -76,8 +77,6 @@ public class RPXUtils {
 
 					buffer = Utils.checkAndGrowByteBuffer(buffer, newEnd);
 					buffer.position((int) shdr_data_elf_offset);
-					// System.out.println("Write data " + String.format("%08X",
-					// shdr_data_elf_offset));
 					buffer.put(data);
 					offset = shdr_data_elf_offset;
 					shdr_data_elf_offset += curSize;
@@ -97,10 +96,14 @@ public class RPXUtils {
 					int type = elfFile.getSections()[sectionIndex].getType();
 
 					if (type == SHT_RPL_IMPORTS) {
-						// Set Value to 0
 						buffer.position((int) (entry_offset + 4));
+						// Set Value to a custom symbol address
 						curSymbolAddress += 4;
 						buffer.putInt((int) curSymbolAddress);
+						buffer.position((int) (entry_offset + 12));
+						// Change type to LOCAL so it won't be in the export list.
+						// Force FUNC type so the name will be used in the decompiler.
+						buffer.put((byte) ((ElfSymbol.STB_LOCAL << 4) | ElfSymbol.STT_FUNC)); // 12
 					}
 					entryPos += h.getEntrySize();
 				}
@@ -132,6 +135,7 @@ public class RPXUtils {
 			buffer.putInt((int) curSize);
 			buffer.putInt(h.getLink());
 			buffer.putInt(h.getInfo());
+
 			buffer.putInt((int) h.getAddressAlignment());
 			buffer.putInt((int) h.getEntrySize());
 
@@ -161,4 +165,5 @@ public class RPXUtils {
 
 		return buffer.array();
 	}
+
 }
