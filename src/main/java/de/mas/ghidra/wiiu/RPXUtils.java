@@ -38,6 +38,28 @@ public class RPXUtils {
 		long shdr_elf_offset = elfFile.e_ehsize() & 0xFFFFFFFF;
 		long shdr_data_elf_offset = shdr_elf_offset + elfFile.e_shnum() * elfFile.e_shentsize();
 
+		// Let's get / decompress the section header string table at first.
+		ElfSectionHeader sh_str_sh = elfFile.getSections()[elfFile.e_shstrndx()];
+		byte[] sh_str_sh_data = new byte[0];
+		if (sh_str_sh.getOffset() != 0) {
+			if ((sh_str_sh.getFlags() & SHT_NOBITS) != SHT_NOBITS) {
+				sh_str_sh_data = sh_str_sh.getData();
+				if ((sh_str_sh.getFlags() & SHF_RPL_ZLIB) == SHF_RPL_ZLIB) {
+					long section_size_inflated = ByteBuffer.wrap(Arrays.copyOf(sh_str_sh_data, 4)).getInt()
+							& 0xFFFFFFFF;
+					Inflater inflater = new Inflater();
+					inflater.setInput(sh_str_sh_data, 4, (int) sh_str_sh.getSize() - 4); // the first byte is the size
+
+					byte[] decompressed = new byte[(int) section_size_inflated];
+
+					inflater.inflate(decompressed);
+					inflater.end();
+
+					sh_str_sh_data = decompressed;
+				}
+			}
+		}
+
 		long curSymbolAddress = 0x01000000;
 
 		for (ElfSectionHeader h : elfFile.getSections()) {
@@ -45,6 +67,7 @@ public class RPXUtils {
 			long curSize = h.getSize();
 			long flags = h.getFlags();
 			long offset = h.getOffset();
+			String sectionName = Utils.stringFromStringTable(sh_str_sh_data, h.getName());
 
 			if (offset != 0) {
 				if ((flags & SHT_NOBITS) != SHT_NOBITS) {

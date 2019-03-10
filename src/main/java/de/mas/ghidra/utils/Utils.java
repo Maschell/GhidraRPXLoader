@@ -24,4 +24,18 @@ public class Utils {
 		}
 		return buffer;
 	}
+
+	public static String stringFromStringTable(byte[] stringTable, int index) {
+		ByteBuffer buf = ByteBuffer.wrap(stringTable);
+
+		int pos = index;
+
+		StringBuilder result = new StringBuilder();
+
+		for (byte b; (b = buf.get(pos)) != 0; pos++) {
+			result.append((char) b);
+		}
+
+		return result.toString();
+	}
 }
