@@ -157,8 +157,7 @@ public class RPXUtils {
 
 			// Hacky way to fix import relocations
 			if (h.getType() == SHT_RPL_IMPORTS) {
-				long fixedAddress = 0;
-				buffer.putInt((int) fixedAddress);
+				buffer.putInt(0);
 			} else {
 				buffer.putInt((int) h.getAddress());
 			}
