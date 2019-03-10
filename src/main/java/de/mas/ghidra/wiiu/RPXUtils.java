@@ -118,17 +118,25 @@ public class RPXUtils {
 					long entry_offset = (int) (offset + entryPos);
 
 					int sectionIndex = buffer.getShort((int) entry_offset + 14) & 0xFFFF;
-					int type = elfFile.getSections()[sectionIndex].getType();
+					ElfSectionHeader curSection = elfFile.getSections()[sectionIndex];
+					int type = curSection.getType();
 
 					if (type == SHT_RPL_IMPORTS) {
+						String symbolSectionName = Utils.stringFromStringTable(sh_str_sh_data, curSection.getName());
 						buffer.position((int) (entry_offset + 4));
 						// Set Value to a custom symbol address
 						curSymbolAddress += 4;
 						buffer.putInt((int) curSymbolAddress);
 						buffer.position((int) (entry_offset + 12));
+
 						// Change type to LOCAL so it won't be in the export list.
 						// Force FUNC type so the name will be used in the decompiler.
-						buffer.put((byte) ((ElfSymbol.STB_LOCAL << 4) | ElfSymbol.STT_FUNC)); // 12
+						byte symbolType = ElfSymbol.STT_FUNC;
+						if (symbolSectionName.startsWith(".d")) {
+							symbolType = ElfSymbol.STT_OBJECT;
+						}
+
+						buffer.put((byte) ((ElfSymbol.STB_LOCAL << 4) | symbolType)); // 12
 					}
 					entryPos += h.getEntrySize();
 				}
