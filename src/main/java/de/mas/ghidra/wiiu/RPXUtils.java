@@ -46,24 +46,30 @@ public class RPXUtils {
 			if (offset != 0) {
 				if ((flags & SHT_NOBITS) != SHT_NOBITS) {
 					byte[] data = h.getData();
+					if (h.getType() == SHT_RPL_CRCS || h.getType() == SHT_RPL_EXPORTS || h.getType() == SHT_RPL_IMPORTS
+							|| h.getType() == SHT_RPL_FILEINFO) {
+						data = new byte[0];
+						curSize = 0;
+					} else {
+						if ((flags & SHF_RPL_ZLIB) == SHF_RPL_ZLIB) {
+							monitor.setMessage("Decompressing section " + h.getTypeAsString());
+							long section_size_inflated = ByteBuffer.wrap(Arrays.copyOf(data, 4)).getInt() & 0xFFFFFFFF;
+							Inflater inflater = new Inflater();
+							inflater.setInput(data, 4, (int) h.getSize() - 4); // the first byte is the size
 
-					if ((flags & SHF_RPL_ZLIB) == SHF_RPL_ZLIB) {
-						monitor.setMessage("Decompressing section " + h.getTypeAsString());
-						long section_size_inflated = ByteBuffer.wrap(Arrays.copyOf(data, 4)).getInt() & 0xFFFFFFFF;
-						Inflater inflater = new Inflater();
-						inflater.setInput(data, 4, (int) h.getSize() - 4); // the first byte is the size
+							byte[] decompressed = new byte[(int) section_size_inflated];
 
-						byte[] decompressed = new byte[(int) section_size_inflated];
+							inflater.inflate(decompressed);
 
-						inflater.inflate(decompressed);
+							inflater.end();
 
-						inflater.end();
-
-						// Is this alignment really necessary?
-						curSize = (section_size_inflated + 0x03) & ~0x3;
-						flags &= ~SHF_RPL_ZLIB;
-						data = decompressed;
+							// Is this alignment really necessary?
+							curSize = (section_size_inflated + 0x03) & ~0x3;
+							flags &= ~SHF_RPL_ZLIB;
+							data = decompressed;
+						}
 					}
+
 					long newEnd = shdr_data_elf_offset + curSize;
 
 					buffer = Utils.checkAndGrowByteBuffer(buffer, newEnd);
