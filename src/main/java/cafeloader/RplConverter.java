@@ -14,7 +14,6 @@ import ghidra.app.util.bin.format.elf.ElfException;
 import ghidra.app.util.bin.format.elf.ElfSectionHeader;
 import ghidra.app.util.bin.format.elf.ElfSectionHeaderConstants;
 import ghidra.app.util.bin.format.elf.RplSectionHeader;
-import ghidra.util.exception.CancelledException;
 import ghidra.util.task.TaskMonitor;
 import ghidra.util.*;
 
@@ -30,7 +29,7 @@ public class RplConverter {
 	public static final byte ELFOSABI_VERSION_CAFE = (byte) 0xFE;
 
 	public static byte[] convertRpl(ByteProvider byteProvider, TaskMonitor monitor)
-			throws ElfException, IOException, CancelledException, DataFormatException {
+			throws ElfException, IOException, DataFormatException {
 		// Read elf header
 		RplHeader elfHeader = RplHeader.createRplHeader(RethrowContinuesFactory.INSTANCE, byteProvider);
 		BinaryReader reader = elfHeader.getReader();

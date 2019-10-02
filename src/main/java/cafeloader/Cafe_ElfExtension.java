@@ -134,8 +134,6 @@ public class Cafe_ElfExtension extends ElfExtension {
 
 	private void processRplExports(ElfLoadHelper elfLoadHelper, ElfSectionHeader sectionHeader) {
 		String sectionName = sectionHeader.getNameAsString();
-		Address loadAddress = elfLoadHelper.findLoadAddress(sectionHeader, 0);
-		Memory memory = elfLoadHelper.getProgram().getMemory();
 		boolean isDataExports = sectionName.contentEquals(".dexports");
 		if (!isDataExports) {
 			// Function exports are already in symbol table
@@ -148,11 +146,11 @@ public class Cafe_ElfExtension extends ElfExtension {
 
 		try {
 			int count = reader.readNextInt();
-			int signature = reader.readNextInt();
+			/* int signature = */ reader.readNextInt();
 			for (int i = 0; i < count; ++i) {
 				int value = reader.readNextInt();
 				int nameOffset = reader.readNextInt();
-				boolean isTlsExport = (nameOffset & 0x80000000) != 0;
+				/* boolean isTlsExport = (nameOffset & 0x80000000) != 0; */
 				String name = reader.readAsciiString(sectionHeader.getOffset() + (nameOffset & 0x7FFFFFFF));
 				elfLoadHelper.createSymbol(elfLoadHelper.getDefaultAddress(value), name, true, false, null);
 			}

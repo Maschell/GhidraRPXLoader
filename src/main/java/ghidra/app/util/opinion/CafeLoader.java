@@ -14,7 +14,6 @@ import ghidra.app.util.Option;
 import ghidra.app.util.bin.ByteArrayProvider;
 import ghidra.app.util.bin.ByteProvider;
 import ghidra.app.util.bin.format.elf.ElfException;
-import ghidra.app.util.bin.format.elf.ElfHeader;
 import ghidra.app.util.importer.MessageLog;
 import ghidra.app.util.importer.MessageLogContinuesFactory;
 import ghidra.program.model.lang.LanguageCompilerSpecPair;
@@ -54,12 +53,11 @@ public class CafeLoader extends ElfLoader {
 	@Override
 	public void load(ByteProvider provider, LoadSpec loadSpec, List<Option> options, Program program,
 			TaskMonitor monitor, MessageLog log) throws IOException {
-
 		try {
 			GenericFactory factory = MessageLogContinuesFactory.create(log);
 			byte[] data = RplConverter.convertRpl(provider, monitor);
 			RplHeader rpl = RplHeader.createRplHeader(factory, new ByteArrayProvider(data));
-			ElfProgramBuilder.loadElf((ElfHeader)rpl, program, options, log, monitor);
+			ElfProgramBuilder.loadElf(rpl, program, options, log, monitor);
 		} catch (ElfException e) {
 			throw new IOException(e.getMessage());
 		} catch (CancelledException e) {

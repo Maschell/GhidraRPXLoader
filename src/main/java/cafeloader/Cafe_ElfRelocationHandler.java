@@ -11,7 +11,6 @@ import ghidra.util.Msg;
 import ghidra.util.exception.InvalidInputException;
 import ghidra.util.exception.NotFoundException;
 import ghidra.program.model.symbol.ExternalLocation;
-import ghidra.program.model.symbol.ExternalLocationIterator;
 import ghidra.program.model.symbol.RefType;
 import ghidra.program.model.symbol.SourceType;
 
