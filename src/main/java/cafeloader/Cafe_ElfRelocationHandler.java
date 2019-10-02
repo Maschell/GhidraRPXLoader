@@ -55,19 +55,23 @@ public class Cafe_ElfRelocationHandler extends ElfRelocationHandler {
 				program.getReferenceManager().addMemoryReference(relocationAddress,
 					elfRelocationContext.getSymbolAddress(sym), RefType.UNCONDITIONAL_CALL, SourceType.IMPORTED, 0);
 			}
-			
-			ExternalLocationIterator locations = program.getExternalManager()
-					.getExternalLocations(elfRelocationContext.getSymbolAddress(sym));
-			while (locations.hasNext()) {
+
+			String rplName = symbolSectionName.split("import_")[1];
+			if (!rplName.endsWith(".rpl")) {
+				 rplName += ".rpl";
+			}
+
+			ExternalLocation location = program.getExternalManager().getUniqueExternalLocation(rplName, sym.getNameAsString());
+			if (location != null) {
 				try {
-					ExternalLocation location = locations.next();
 					program.getReferenceManager().addExternalReference(relocationAddress, 1,
-							location, SourceType.IMPORTED, RefType.UNCONDITIONAL_CALL);
+							  location, SourceType.IMPORTED, RefType.UNCONDITIONAL_CALL);
 				} catch (InvalidInputException e) {
 					Msg.warn(this, "addExternalReference failed with " + e);
 				}
+			} else {
+				Msg.warn(this, "Failed to find location for " + sym.getNameAsString());
 			}
-
 		}
 
 		switch (type) {
