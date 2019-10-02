@@ -1,6 +1,7 @@
 package cafeloader;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 import ghidra.app.util.bin.BinaryReader;
 import ghidra.app.util.bin.format.elf.*;
@@ -11,6 +12,7 @@ import ghidra.program.model.mem.Memory;
 import ghidra.program.model.mem.MemoryAccessException;
 import ghidra.program.model.symbol.SourceType;
 import ghidra.program.model.data.*;
+import ghidra.program.model.lang.Register;
 import ghidra.util.*;
 import ghidra.util.exception.*;
 import ghidra.util.task.TaskMonitor;
@@ -170,7 +172,8 @@ public class Cafe_ElfExtension extends ElfExtension {
 		}
 
 		int version = RPL_FILEINFO_V3;
-		Memory memory = elfLoadHelper.getProgram().getMemory();
+		Program program = elfLoadHelper.getProgram();
+		Memory memory = program.getMemory();
 		try {
 			version = memory.getInt(fileInfoAddr);
 		} catch (MemoryAccessException e) {
@@ -181,6 +184,8 @@ public class Cafe_ElfExtension extends ElfExtension {
 			new StructureDataType(new CategoryPath("/ELF"), "Elf32_RplFileInfo", 0);
 
 		int filenameOffset = 0;
+		int sdaBase = 0;
+		int sda2Base = 0;
 		if (version >= RPL_FILEINFO_V3) {
 			fileInfo.add(DWordDataType.dataType, "version", null);
 			fileInfo.add(DWordDataType.dataType, "textSize", null);
@@ -197,9 +202,31 @@ public class Cafe_ElfExtension extends ElfExtension {
 			fileInfo.add(DWordDataType.dataType, "filenameOffset", null);
 
 			try {
+				sdaBase = memory.getInt(fileInfoAddr.add(0x24));
+				sda2Base = memory.getInt(fileInfoAddr.add(0x28));
 				filenameOffset = memory.getInt(fileInfoAddr.add(0x30));
 			} catch (MemoryAccessException e) {
 				Msg.warn(this, "Failed to read filenameOffset");
+			}
+		}
+
+		Address minAddress = program.getAddressFactory().getDefaultAddressSpace().getMinAddress();
+		Address maxAddress = program.getAddressFactory().getDefaultAddressSpace().getMaxAddress();
+		if (sdaBase != 0 && minAddress != null && maxAddress != null) {
+			Register r13 = elfLoadHelper.getProgram().getRegister("r13");
+			try {
+				program.getProgramContext().setValue(r13, minAddress, maxAddress, BigInteger.valueOf(sdaBase));
+			} catch (ContextChangeException e) {
+				Msg.warn(this, "Error setting r13 to sdabase: " + e);
+			}
+		}
+
+		if (sda2Base != 0 && minAddress != null && maxAddress != null) {
+			Register r2 = elfLoadHelper.getProgram().getRegister("r2");
+			try {
+				program.getProgramContext().setValue(r2, minAddress, maxAddress, BigInteger.valueOf(sda2Base));
+			} catch (ContextChangeException e) {
+				Msg.warn(this, "Error setting r2 to sda2base: " + e);
 			}
 		}
 
