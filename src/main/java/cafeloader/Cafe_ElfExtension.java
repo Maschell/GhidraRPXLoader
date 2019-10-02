@@ -79,12 +79,15 @@ public class Cafe_ElfExtension extends ElfExtension {
 		}
 
 		try {
+			Program program = elfLoadHelper.getProgram();
 			elfLoadHelper.setElfSymbolAddress(elfSymbol, address);
 			elfLoadHelper.createSymbol(address, name, true, elfSymbol.isAbsolute(), null);
 
 			if (elfSymbol.isFunction()) {
-				Program program = elfLoadHelper.getProgram();
 				program.getExternalManager().addExtFunction(rplName, name, address,
+						SourceType.IMPORTED);
+			} else if (elfSymbol.isObject()) {
+				program.getExternalManager().addExtLocation(rplName, name, address,
 						SourceType.IMPORTED);
 			}
 
