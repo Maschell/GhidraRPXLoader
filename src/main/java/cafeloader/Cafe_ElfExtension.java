@@ -105,6 +105,18 @@ public class Cafe_ElfExtension extends ElfExtension {
 	}
 
 	@Override
+	public Boolean isSectionWritable(ElfSectionHeader section) {
+		// For some reason .rpl files have .rodata marked with W flag,
+		// forcing it to read only will help improve decompiler output.
+		String name = section.getNameAsString();
+		if (name != null && name.contentEquals(".rodata")) {
+			return false;
+		}
+
+		return (section.getFlags() & ElfSectionHeaderConstants.SHF_WRITE) != 0;
+	}
+
+	@Override
 	public void processElf(ElfLoadHelper elfLoadHelper, TaskMonitor monitor)
 			throws CancelledException {
 		ElfHeader elf = elfLoadHelper.getElfHeader();
