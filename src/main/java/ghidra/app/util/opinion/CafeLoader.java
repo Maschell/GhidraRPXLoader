@@ -28,8 +28,26 @@ public class CafeLoader extends ElfLoader {
 		List<LoadSpec> loadSpecs = new ArrayList<>();
 
 		if (Arrays.equals(provider.readBytes(0, header.length), header)) {
-			loadSpecs.add(new LoadSpec(this, 0, new LanguageCompilerSpecPair("PowerPC:BE:32:Gekko_Broadway", "default"), true));
-			return loadSpecs;
+			List<QueryResult> results = QueryOpinionService.query(getName(), "wiiu", null);
+			boolean hasGekkoProcessor = false;
+
+			for (QueryResult result : results) {
+				if (result.pair.languageID.getIdAsString().contains("Gekko")) {
+					hasGekkoProcessor = true;
+				}
+			}
+
+			for (QueryResult result : results) {
+				if (result.pair.languageID.getIdAsString().contains("Gekko")) {
+					loadSpecs.add(new LoadSpec(this, 0, new QueryResult(result.pair, true)));
+				} else {
+					loadSpecs.add(new LoadSpec(this, 0, new QueryResult(result.pair, hasGekkoProcessor ? false : result.preferred)));
+				}
+			}
+
+			if (loadSpecs.isEmpty()) {
+				loadSpecs.add(new LoadSpec(this, 0, new LanguageCompilerSpecPair("PowerPC:BE:32:default", "default"), true));
+			}
 		}
 
 		return loadSpecs;
