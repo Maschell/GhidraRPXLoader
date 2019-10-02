@@ -1,5 +1,8 @@
 package cafeloader;
 
+import java.io.IOException;
+
+import ghidra.app.util.bin.BinaryReader;
 import ghidra.app.util.bin.format.elf.*;
 import ghidra.app.util.bin.format.elf.extend.*;
 import ghidra.program.model.address.*;
@@ -109,7 +112,40 @@ public class Cafe_ElfExtension extends ElfExtension {
 				processRplCrcs(elfLoadHelper, sectionHeader);
 			} else if (headertype == SHT_RPL_FILEINFO.value) {
 				processRplFileInfo(elfLoadHelper, sectionHeader);
+			} else if (headertype == SHT_RPL_EXPORTS.value) {
+				processRplExports(elfLoadHelper, sectionHeader);
 			}
+		}
+	}
+
+	private void processRplExports(ElfLoadHelper elfLoadHelper, ElfSectionHeader sectionHeader) {
+		String sectionName = sectionHeader.getNameAsString();
+		Address loadAddress = elfLoadHelper.findLoadAddress(sectionHeader, 0);
+		Memory memory = elfLoadHelper.getProgram().getMemory();
+		boolean isDataExports = sectionName.contentEquals(".dexports");
+		if (!isDataExports) {
+			// Function exports are already in symbol table
+			return;
+		}
+
+		// Create symbols for data exports
+		BinaryReader reader = elfLoadHelper.getElfHeader().getReader();
+		reader.setPointerIndex(sectionHeader.getOffset());
+
+		try {
+			int count = reader.readNextInt();
+			int signature = reader.readNextInt();
+			for (int i = 0; i < count; ++i) {
+				int value = reader.readNextInt();
+				int nameOffset = reader.readNextInt();
+				boolean isTlsExport = (nameOffset & 0x80000000) != 0;
+				String name = reader.readAsciiString(sectionHeader.getOffset() + (nameOffset & 0x7FFFFFFF));
+				elfLoadHelper.createSymbol(elfLoadHelper.getDefaultAddress(value), name, true, false, null);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InvalidInputException e) {
+			e.printStackTrace();
 		}
 	}
 
