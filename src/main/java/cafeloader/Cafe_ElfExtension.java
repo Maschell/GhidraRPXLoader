@@ -135,38 +135,60 @@ public class Cafe_ElfExtension extends ElfExtension {
 				processRplCrcs(elfLoadHelper, sectionHeader);
 			} else if (headertype == SHT_RPL_FILEINFO.value) {
 				processRplFileInfo(elfLoadHelper, sectionHeader);
+			} else if (headertype == SHT_RPL_IMPORTS.value) {
+				processRplImports(elfLoadHelper, sectionHeader);
 			} else if (headertype == SHT_RPL_EXPORTS.value) {
 				processRplExports(elfLoadHelper, sectionHeader);
 			}
 		}
 	}
 
+	private void processRplImports(ElfLoadHelper elfLoadHelper, ElfSectionHeader sectionHeader) {
+		// Clear the section data otherwise analysis will identify strings in it.
+		Address sectionAddress = elfLoadHelper.findLoadAddress(sectionHeader, 0);
+		int sectionSize = (int) sectionHeader.getSize();
+		elfLoadHelper.createUndefinedData(sectionAddress, sectionSize);
+
+		byte[] zeroes = new byte[sectionSize];
+		try {
+			elfLoadHelper.getProgram().getMemory().setBytes(sectionAddress, zeroes);
+		} catch (MemoryAccessException e) {
+		}
+	}
+
 	private void processRplExports(ElfLoadHelper elfLoadHelper, ElfSectionHeader sectionHeader) {
 		String sectionName = sectionHeader.getNameAsString();
-		boolean isDataExports = sectionName.contentEquals(".dexports");
-		if (!isDataExports) {
-			// Function exports are already in symbol table
-			return;
+		if (sectionName.contentEquals(".dexports")) {
+			// Create symbols for data exports
+			BinaryReader reader = elfLoadHelper.getElfHeader().getReader();
+			reader.setPointerIndex(sectionHeader.getOffset());
+
+			try {
+				int count = reader.readNextInt();
+				/* int signature = */ reader.readNextInt();
+				for (int i = 0; i < count; ++i) {
+					int value = reader.readNextInt();
+					int nameOffset = reader.readNextInt();
+					/* boolean isTlsExport = (nameOffset & 0x80000000) != 0; */
+					String name = reader.readAsciiString(sectionHeader.getOffset() + (nameOffset & 0x7FFFFFFF));
+					elfLoadHelper.createSymbol(elfLoadHelper.getDefaultAddress(value), name, true, false, null);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InvalidInputException e) {
+				e.printStackTrace();
+			}
 		}
 
-		// Create symbols for data exports
-		BinaryReader reader = elfLoadHelper.getElfHeader().getReader();
-		reader.setPointerIndex(sectionHeader.getOffset());
+		// Clear the section data otherwise analysis will identify strings in it.
+		Address sectionAddress = elfLoadHelper.findLoadAddress(sectionHeader, 0);
+		int sectionSize = (int) sectionHeader.getSize();
+		elfLoadHelper.createUndefinedData(sectionAddress, sectionSize);
 
+		byte[] zeroes = new byte[sectionSize];
 		try {
-			int count = reader.readNextInt();
-			/* int signature = */ reader.readNextInt();
-			for (int i = 0; i < count; ++i) {
-				int value = reader.readNextInt();
-				int nameOffset = reader.readNextInt();
-				/* boolean isTlsExport = (nameOffset & 0x80000000) != 0; */
-				String name = reader.readAsciiString(sectionHeader.getOffset() + (nameOffset & 0x7FFFFFFF));
-				elfLoadHelper.createSymbol(elfLoadHelper.getDefaultAddress(value), name, true, false, null);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidInputException e) {
-			e.printStackTrace();
+			elfLoadHelper.getProgram().getMemory().setBytes(sectionAddress, zeroes);
+		} catch (MemoryAccessException e) {
 		}
 	}
 
