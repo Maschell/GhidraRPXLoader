@@ -113,6 +113,15 @@ public class Cafe_ElfExtension extends ElfExtension {
 			return false;
 		}
 
+		// Force .dimport section to writeable so compiler does not inline
+		// the value... even though its external...
+		// TODO: Maybe there is a better way to define .dimport/.fimport
+		// sections as not real loaded in memory sections so that the
+		// compiler does not inline it's values?
+		if (name != null && name.startsWith(".dimport")) {
+			return true;
+		}
+
 		return (section.getFlags() & ElfSectionHeaderConstants.SHF_WRITE) != 0;
 	}
 
