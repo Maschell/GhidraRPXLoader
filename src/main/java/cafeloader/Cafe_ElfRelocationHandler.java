@@ -44,40 +44,43 @@ public class Cafe_ElfRelocationHandler extends ElfRelocationHandler {
 		 * reference because it will be too far away for the actual relocation to
 		 * be valid itself.
 		 */
-		ElfSectionHeader symbolSection = elf.getSections()[sym.getSectionHeaderIndex()];
-		if (symbolSection.getType() == Cafe_ElfExtension.SHT_RPL_IMPORTS.value) {
-			String symbolSectionName = symbolSection.getNameAsString();
-			boolean isDataImport = false;
-			if (symbolSectionName.startsWith(".dimport_")) {
-				program.getReferenceManager().addMemoryReference(relocationAddress,
-					elfRelocationContext.getSymbolAddress(sym), RefType.DATA, SourceType.IMPORTED, 0);
-				isDataImport = true;
-			} else if (symbolSectionName.startsWith(".fimport_")) {
-				program.getReferenceManager().addMemoryReference(relocationAddress,
-					elfRelocationContext.getSymbolAddress(sym), RefType.UNCONDITIONAL_CALL, SourceType.IMPORTED, 0);
-			}
-
-			String rplName = symbolSectionName.split("import_")[1];
-			if (!rplName.endsWith(".rpl")) {
-				 rplName += ".rpl";
-			}
-
-			ExternalLocation location = program.getExternalManager().getUniqueExternalLocation(rplName, sym.getNameAsString());
-			if (location != null) {
-				try {
-					if (isDataImport) {
-						program.getReferenceManager().addExternalReference(relocationAddress, 1,
-								  location, SourceType.IMPORTED, RefType.DATA);
-					} else {
-						program.getReferenceManager().addExternalReference(relocationAddress, 1,
-								  location, SourceType.IMPORTED, RefType.UNCONDITIONAL_CALL);
-					}
-				} catch (InvalidInputException e) {
-					Msg.warn(this, "addExternalReference failed with " + e);
-				}
-			} else {
-				Msg.warn(this, "Failed to find location for " + sym.getNameAsString());
-			}
+		
+		if (sym.getSectionHeaderIndex() > 0) {	
+    		ElfSectionHeader symbolSection = elf.getSections()[sym.getSectionHeaderIndex()];
+    		if (symbolSection.getType() == Cafe_ElfExtension.SHT_RPL_IMPORTS.value) {
+    			String symbolSectionName = symbolSection.getNameAsString();
+    			boolean isDataImport = false;
+    			if (symbolSectionName.startsWith(".dimport_")) {
+    				program.getReferenceManager().addMemoryReference(relocationAddress,
+    					elfRelocationContext.getSymbolAddress(sym), RefType.DATA, SourceType.IMPORTED, 0);
+    				isDataImport = true;
+    			} else if (symbolSectionName.startsWith(".fimport_")) {
+    				program.getReferenceManager().addMemoryReference(relocationAddress,
+    					elfRelocationContext.getSymbolAddress(sym), RefType.UNCONDITIONAL_CALL, SourceType.IMPORTED, 0);
+    			}
+    
+    			String rplName = symbolSectionName.split("import_")[1];
+    			if (!rplName.endsWith(".rpl")) {
+    				 rplName += ".rpl";
+    			}
+    
+    			ExternalLocation location = program.getExternalManager().getUniqueExternalLocation(rplName, sym.getNameAsString());
+    			if (location != null) {
+    				try {
+    					if (isDataImport) {
+    						program.getReferenceManager().addExternalReference(relocationAddress, 1,
+    								  location, SourceType.IMPORTED, RefType.DATA);
+    					} else {
+    						program.getReferenceManager().addExternalReference(relocationAddress, 1,
+    								  location, SourceType.IMPORTED, RefType.UNCONDITIONAL_CALL);
+    					}
+    				} catch (InvalidInputException e) {
+    					Msg.warn(this, "addExternalReference failed with " + e);
+    				}
+    			} else {
+    				Msg.warn(this, "Failed to find location for " + sym.getNameAsString());
+    			}
+    		}
 		}
 
 		switch (type) {
