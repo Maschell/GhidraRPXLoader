@@ -26,6 +26,10 @@ gradle
 
 Output goes into `dist`
 
+# Eclipse
+
+To be able open this module in eclipse, you need to create a new Ghidra Module and copy the `.classpath`, `.project` and `.settings` to copy of this repository.
+
 # Credits
 
 Based on https://github.com/Relys/rpl2elf
