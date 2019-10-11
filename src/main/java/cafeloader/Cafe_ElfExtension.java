@@ -89,10 +89,10 @@ public class Cafe_ElfExtension extends ElfExtension {
 			elfLoadHelper.createSymbol(address, name, true, elfSymbol.isAbsolute(), null);
 
 			if (elfSymbol.isFunction()) {
-				program.getExternalManager().addExtFunction(rplName, name, address,
+				program.getExternalManager().addExtFunction(rplName, name, null,
 						SourceType.IMPORTED);
 			} else if (elfSymbol.isObject()) {
-				program.getExternalManager().addExtLocation(rplName, name, address,
+				program.getExternalManager().addExtLocation(rplName, name, null,
 						SourceType.IMPORTED);
 			}
 
