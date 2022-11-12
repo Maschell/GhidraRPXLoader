@@ -1,19 +1,16 @@
 package cafeloader;
 
 import java.lang.Throwable;
+import java.util.function.Consumer;
 
-import generic.continues.GenericFactory;
 import ghidra.app.util.bin.ByteProvider;
 import ghidra.app.util.bin.format.elf.ElfException;
 import ghidra.app.util.bin.format.elf.ElfHeader;
 
 public class RplHeader extends ElfHeader
 {
-	public static RplHeader createRplHeader(GenericFactory factory, ByteProvider provider)
-			throws ElfException {
-		RplHeader elfHeader = (RplHeader) factory.create(RplHeader.class);
-		elfHeader.initElfHeader(factory, provider);
-		return elfHeader;
+	public RplHeader(ByteProvider provider, Consumer<String> errorConsumer) throws ElfException {
+		super(provider, errorConsumer);
 	}
 
 	@Override

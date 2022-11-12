@@ -2,13 +2,12 @@ package cafeloader;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.function.Consumer;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
-import generic.continues.RethrowContinuesFactory;
 import ghidra.app.util.bin.BinaryReader;
 import ghidra.app.util.bin.ByteProvider;
-import ghidra.app.util.bin.format.FactoryBundledWithBinaryReader;
 import ghidra.app.util.bin.format.elf.ElfConstants;
 import ghidra.app.util.bin.format.elf.ElfException;
 import ghidra.app.util.bin.format.elf.ElfSectionHeader;
@@ -28,10 +27,10 @@ public class RplConverter {
 	public static final byte ELFOSABI_CAFE = (byte) 0xCA;
 	public static final byte ELFOSABI_VERSION_CAFE = (byte) 0xFE;
 
-	public static byte[] convertRpl(ByteProvider byteProvider, TaskMonitor monitor)
+	public static byte[] convertRpl(ByteProvider byteProvider, Consumer<String> errorConsumer)
 			throws ElfException, IOException, DataFormatException {
 		// Read elf header
-		RplHeader elfHeader = RplHeader.createRplHeader(RethrowContinuesFactory.INSTANCE, byteProvider);
+		RplHeader elfHeader = new RplHeader(byteProvider, errorConsumer);
 		BinaryReader reader = elfHeader.getReader();
 
 		// Write elf header
@@ -55,18 +54,18 @@ public class RplConverter {
 		out.write(dc.getBytes((short) 0)); // phentsize
 		out.write(dc.getBytes((short) 0)); // phnum
 		out.write(dc.getBytes(elfHeader.e_shentsize()));
-		out.write(dc.getBytes(elfHeader.e_shnum()));
-		out.write(dc.getBytes(elfHeader.e_shstrndx()));
+		out.write(dc.getBytes((short)elfHeader.getSectionHeaderCount()));
+		out.write(dc.getBytes((short)elfHeader.e_shstrndx()));
 		out.write(new byte[0x40 - 0x34]); // padding until section headers
 
 		// Read sections
-		long sectionDataOffset = elfHeader.e_shoff() + (elfHeader.e_shnum() * elfHeader.e_shentsize());
+		long sectionDataOffset = elfHeader.e_shoff() + ((long) elfHeader.getSectionHeaderCount() * elfHeader.e_shentsize());
 		ByteArrayOutputStream sectionData = new ByteArrayOutputStream();
 
-		for (int i = 0; i < elfHeader.e_shnum(); ++i) {
-			long index = elfHeader.e_shoff() + (i * elfHeader.e_shentsize());
+		for (int i = 0; i < elfHeader.getSectionHeaderCount(); ++i) {
+			long index = elfHeader.e_shoff() + ((long) i * elfHeader.e_shentsize());
 			reader.setPointerIndex(index);
-			ElfSectionHeader sectionHeader = RplSectionHeader.createElfSectionHeader((FactoryBundledWithBinaryReader) reader, elfHeader);
+			ElfSectionHeader sectionHeader = new RplSectionHeader(reader, elfHeader);
 			long size = sectionHeader.getSize();
 			reader.setPointerIndex(sectionHeader.getOffset());
 

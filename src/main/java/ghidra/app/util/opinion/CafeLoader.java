@@ -9,13 +9,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
-import generic.continues.GenericFactory;
 import ghidra.app.util.Option;
 import ghidra.app.util.bin.ByteArrayProvider;
 import ghidra.app.util.bin.ByteProvider;
 import ghidra.app.util.bin.format.elf.ElfException;
+import ghidra.app.util.bin.format.elf.ElfHeader;
 import ghidra.app.util.importer.MessageLog;
-import ghidra.app.util.importer.MessageLogContinuesFactory;
 import ghidra.program.model.lang.LanguageCompilerSpecPair;
 import ghidra.program.model.listing.Program;
 import ghidra.util.exception.CancelledException;
@@ -70,18 +69,13 @@ public class CafeLoader extends ElfLoader {
 
 	@Override
 	public void load(ByteProvider provider, LoadSpec loadSpec, List<Option> options, Program program,
-			TaskMonitor monitor, MessageLog log) throws IOException {
+			TaskMonitor monitor, MessageLog log) throws IOException, CancelledException {
 		try {
-			GenericFactory factory = MessageLogContinuesFactory.create(log);
-			byte[] data = RplConverter.convertRpl(provider, monitor);
-			RplHeader rpl = RplHeader.createRplHeader(factory, new ByteArrayProvider(data));
+			byte[] data = RplConverter.convertRpl(provider, log::appendMsg);
+			RplHeader rpl = new RplHeader(new ByteArrayProvider(data), log::appendMsg);
 			ElfProgramBuilder.loadElf(rpl, program, options, log, monitor);
-		} catch (ElfException e) {
-			throw new IOException(e.getMessage());
-		} catch (CancelledException e) {
-			throw new IOException(e.getMessage());
-		} catch (DataFormatException e) {
-			throw new IOException(e.getMessage());
+		} catch (ElfException | DataFormatException var8) {
+			throw new IOException(var8.getMessage());
 		}
 	}
 }

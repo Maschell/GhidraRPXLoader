@@ -12,7 +12,7 @@ The loader will fallback to the default PowerPC processor if the Gekko/Broadway 
 
 # Usage
 
-Install the extension using the `Install Extensions` option inside Ghidra or extract the .zip manually into `[GHIDRA_ROOT]\Ghidra\Extensions`. Make sure to restart the program after installing.
+Install the extension using the `Install Extensions` option inside Ghidra.
 
 Once the extension is installed, you can import a .rpx/.rpl file via `File->Import File...`.
 
