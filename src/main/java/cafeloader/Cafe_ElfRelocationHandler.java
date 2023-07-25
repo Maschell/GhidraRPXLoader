@@ -13,6 +13,8 @@ import ghidra.util.exception.NotFoundException;
 import ghidra.program.model.symbol.ExternalLocation;
 import ghidra.program.model.symbol.RefType;
 import ghidra.program.model.symbol.SourceType;
+import ghidra.program.model.reloc.Relocation.Status;
+import ghidra.program.model.reloc.RelocationResult;
 
 public class Cafe_ElfRelocationHandler extends ElfRelocationHandler {
 	@Override
@@ -21,11 +23,11 @@ public class Cafe_ElfRelocationHandler extends ElfRelocationHandler {
 	}
 
 	@Override
-	public void relocate(ElfRelocationContext elfRelocationContext, ElfRelocation relocation,
+	public RelocationResult relocate(ElfRelocationContext elfRelocationContext, ElfRelocation relocation,
 			Address relocationAddress) throws MemoryAccessException, NotFoundException {
 		int type = relocation.getType();
 		if (type == Cafe_ElfRelocationConstants.R_PPC_NONE) {
-			return;
+			return RelocationResult.SKIPPED;
 		}
 
 		ElfHeader elf = elfRelocationContext.getElfHeader();
@@ -38,6 +40,8 @@ public class Cafe_ElfRelocationHandler extends ElfRelocationHandler {
 		int symbolValue = (int) elfRelocationContext.getSymbolValue(sym);
 		int oldValue = memory.getInt(relocationAddress);
 		int newValue = 0;
+
+		int byteLength = 4; // most relocations affect 4-bytes (change if different)
 
 		/*
 		 * If the symbol is in a SHT_RPL_IMPORTS section then we must add a memory
@@ -91,14 +95,17 @@ public class Cafe_ElfRelocationHandler extends ElfRelocationHandler {
 			case Cafe_ElfRelocationConstants.R_PPC_ADDR16_LO:
 				newValue = symbolValue + addend;
 				memory.setShort(relocationAddress, (short) newValue);
+				byteLength = 2;
 				break;
 			case Cafe_ElfRelocationConstants.R_PPC_ADDR16_HI:
 				newValue = (symbolValue + addend) >> 16;
 				memory.setShort(relocationAddress, (short) newValue);
+				byteLength = 2;
 				break;
 			case Cafe_ElfRelocationConstants.R_PPC_ADDR16_HA:
 				newValue = (symbolValue + addend + 0x8000) >> 16;
 				memory.setShort(relocationAddress, (short) newValue);
+				byteLength = 2;
 				break;
 			case Cafe_ElfRelocationConstants.R_PPC_REL24:
 				newValue = (symbolValue + addend - offset) >> 2;
@@ -115,14 +122,17 @@ public class Cafe_ElfRelocationHandler extends ElfRelocationHandler {
 			case Cafe_ElfRelocationConstants.R_PPC_GHS_REL16_HA:
 				newValue = (symbolValue + addend - offset + 0x8000) >> 16;
 				memory.setShort(relocationAddress, (short) newValue);
+				byteLength = 2;
 				break;
 			case Cafe_ElfRelocationConstants.R_PPC_GHS_REL16_HI:
 				newValue = (symbolValue + addend - offset) >> 16;
 				memory.setShort(relocationAddress, (short) newValue);
+				byteLength = 2;
 				break;
 			case Cafe_ElfRelocationConstants.R_PPC_GHS_REL16_LO:
 				newValue = (symbolValue + addend - offset);
 				memory.setShort(relocationAddress, (short) newValue);
+				byteLength = 2;
 				break;
 			case Cafe_ElfRelocationConstants.R_PPC_DTPREL32:
 				newValue = symbolValue + addend;
@@ -143,10 +153,9 @@ public class Cafe_ElfRelocationHandler extends ElfRelocationHandler {
 			case Cafe_ElfRelocationConstants.R_PPC_DIAB_RELSDA_HI:
 			case Cafe_ElfRelocationConstants.R_PPC_DIAB_RELSDA_HA:
 			default:
-				String symbolName = sym.getNameAsString();
-				markAsUnhandled(program, relocationAddress, type, symbolIndex, symbolName,
-					elfRelocationContext.getLog());
-				break;
+				return RelocationResult.UNSUPPORTED;
 		}
+
+		return new RelocationResult(Status.APPLIED, byteLength);
 	}
 }
