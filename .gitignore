@@ -6,3 +6,5 @@ dist/
 .classpath
 .antProperties.xml
 /bin/
+.idea/
+lib/lz4-java-1.5.1.jar
