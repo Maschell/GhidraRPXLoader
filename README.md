@@ -27,10 +27,6 @@ The loader will fallback to the default PowerPC processor if the Gekko/Broadway 
 ## Usage 
 - Choose the `Gekko/Broadway/Espresso` language if asked
 
-# Eclipse
-
-To be able open this module in eclipse, you need to create a new Ghidra Module and copy the `.classpath`, `.project` and `.settings` to the root of this repository.
-
 # Credits
 
 - Based on https://github.com/Relys/rpl2elf
