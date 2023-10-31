@@ -1,6 +1,6 @@
 <opinions>
     <constraint loader="Wii U / CafeOS Binary (RPX/RPL)" compilerSpecID="default">
-        <constraint primary="wiiu" processor="PowerPC" endian="big" size="32" variant="Gekko/Broadway" />
+        <constraint primary="wiiu" processor="PowerPC" endian="big" size="32" variant="Gekko/Broadway/Espresso" />
         <constraint primary="wiiu" processor="PowerPC" endian="big" size="32" variant="default" />
     </constraint>
 </opinions>

@@ -99,7 +99,12 @@ buildExtension {
         exclude 'certification.manifest'
         exclude 'dist/**'
         exclude 'bin/**'
+        exclude 'lib/**'
+        exclude 'gradle/**'
         exclude 'src/**'
+        exclude '.git/**'
+        exclude '.idea/**'
+        exclude '.github/**'
         exclude '.gradle/**'
         exclude 'gradle/**'
         exclude 'gradlew'
@@ -118,6 +123,8 @@ buildExtension {
         println "\nCreated " + baseName + "." + extension + " in " + destinationDir
     }
 }
+
+tasks.withType(Copy).all { duplicatesStrategy 'exclude' }
 
 jar {
    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
