@@ -77,16 +77,16 @@
     <register name="spr033" group="SPR_UNNAMED"/>
     <register name="spr034" group="SPR_UNNAMED"/>
     <register name="spr035" group="SPR_UNNAMED"/>
-    <register name="spr036" rename="DECAR" group="SPR"/>
+    <register name="spr036" group="SPR_UNNAMED"/>
     <register name="spr037" group="SPR_UNNAMED"/>
     <register name="spr038" group="SPR_UNNAMED"/>
     <register name="spr039" group="SPR_UNNAMED"/>
-    <register name="CSRR0" group="SPR"/>
-    <register name="CSRR1" group="SPR"/>
+    <register name="spr03a" group="SPR_UNNAMED"/>
+    <register name="spr03b" group="SPR_UNNAMED"/>
     <register name="spr03c" group="SPR_UNNAMED"/>
     <register name="spr03d" group="SPR_UNNAMED"/>
     <register name="spr03e" group="SPR_UNNAMED"/>
-    <register name="spr03f" rename="IVPR" group="SPR"/>
+    <register name="spr03f" group="SPR_UNNAMED"/>
 
     <register name="spr040" group="SPR_UNNAMED"/>
     <register name="spr041" group="SPR_UNNAMED"/>
@@ -105,9 +105,9 @@
     <register name="spr04e" group="SPR_UNNAMED"/>
     <register name="spr04f" group="SPR_UNNAMED"/>
 
-    <register name="spr050" rename="EIE" group="SPR"/>
-    <register name="spr051" rename="EID" group="SPR"/>
-    <register name="spr052" rename="NRI" group="SPR"/>
+    <register name="spr050" group="SPR_UNNAMED"/>
+    <register name="spr051" group="SPR_UNNAMED"/>
+    <register name="spr052" group="SPR_UNNAMED"/>
     <register name="spr053" group="SPR_UNNAMED"/>
     <register name="spr054" group="SPR_UNNAMED"/>
     <register name="spr055" group="SPR_UNNAMED"/>
@@ -173,21 +173,21 @@
     <register name="spr08e" group="SPR_UNNAMED"/>
     <register name="spr08f" group="SPR_UNNAMED"/>
 
-    <register name="spr090" rename="CMPA" group="SPR"/>
-    <register name="spr091" rename="CMPB" group="SPR"/>
-    <register name="spr092" rename="CMPC" group="SPR"/>
-    <register name="spr093" rename="CMPD" group="SPR"/>
-    <register name="spr094" rename="ECR" group="SPR"/>
-    <register name="spr095" rename="DER" group="SPR"/>
-    <register name="spr096" rename="COUNTA" group="SPR"/>
-    <register name="spr097" rename="COUNTB" group="SPR"/>
-    <register name="spr098" rename="CMPE" group="SPR"/>
-    <register name="spr099" rename="CMPF" group="SPR"/>
-    <register name="spr09a" rename="CMPH" group="SPR"/>
-    <register name="spr09b" rename="LCTR1" group="SPR"/>
-    <register name="spr09c" rename="LCTR2" group="SPR"/>
-    <register name="spr09d" rename="ICTRL" group="SPR"/>
-    <register name="spr09e" rename="BAR" group="SPR"/>
+    <register name="spr090" group="SPR_UNNAMED"/>
+    <register name="spr091" group="SPR_UNNAMED"/>
+    <register name="spr092" group="SPR_UNNAMED"/>
+    <register name="spr093" group="SPR_UNNAMED"/>
+    <register name="spr094" group="SPR_UNNAMED"/>
+    <register name="spr095" group="SPR_UNNAMED"/>
+    <register name="spr096" group="SPR_UNNAMED"/>
+    <register name="spr097" group="SPR_UNNAMED"/>
+    <register name="spr098" group="SPR_UNNAMED"/>
+    <register name="spr099" group="SPR_UNNAMED"/>
+    <register name="spr09a" group="SPR_UNNAMED"/>
+    <register name="spr09b" group="SPR_UNNAMED"/>
+    <register name="spr09c" group="SPR_UNNAMED"/>
+    <register name="spr09d" group="SPR_UNNAMED"/>
+    <register name="spr09e" group="SPR_UNNAMED"/>
     <register name="spr09f" group="SPR_UNNAMED"/>
 
     <register name="spr0a0" group="SPR_UNNAMED"/>
@@ -292,14 +292,14 @@
     <register name="spr0fe" group="SPR_UNNAMED"/>
     <register name="spr0ff" group="SPR_UNNAMED"/>
 
-    <register name="spr100" rename="USPRG0" group="SPR"/>
+    <register name="spr100" group="SPR_UNNAMED"/>
     <register name="spr101" group="SPR_UNNAMED"/>
     <register name="spr102" group="SPR_UNNAMED"/>
     <register name="spr103" group="SPR_UNNAMED"/>
-    <register name="spr104" rename="SPRG41" group="SPR"/>
-    <register name="spr105" rename="SPRG51" group="SPR"/>
-    <register name="spr106" rename="SPRG61" group="SPR"/>
-    <register name="spr107" rename="SPRG71" group="SPR"/>
+    <register name="spr104" group="SPR_UNNAMED"/>
+    <register name="spr105" group="SPR_UNNAMED"/>
+    <register name="spr106" group="SPR_UNNAMED"/>
+    <register name="spr107" group="SPR_UNNAMED"/>
     <register name="spr108" group="SPR_UNNAMED"/>
     <register name="spr109" group="SPR_UNNAMED"/>
     <register name="spr10a" group="SPR_UNNAMED"/>
@@ -313,16 +313,16 @@
     <register name="spr111" rename="SPRG1" group="SPR"/>
     <register name="spr112" rename="SPRG2" group="SPR"/>
     <register name="spr113" rename="SPRG3" group="SPR"/>
-    <register name="spr114" rename="SPRG4" group="SPR"/>
-    <register name="spr115" rename="SPRG5" group="SPR"/>
-    <register name="spr116" rename="SPRG6" group="SPR"/>
-    <register name="spr117" rename="SPRG7" group="SPR"/>
-    <register name="spr118" rename="ASR" group="SPR"/>
+    <register name="spr114" group="SPR_UNNAMED"/>
+    <register name="spr115" group="SPR_UNNAMED"/>
+    <register name="spr116" group="SPR_UNNAMED"/>
+    <register name="spr117" group="SPR_UNNAMED"/>
+    <register name="spr118" group="SPR_UNNAMED"/>
     <register name="spr119" group="SPR_UNNAMED"/>
     <register name="spr11a" rename="EAR" group="SPR"/>
     <register name="spr11b" group="SPR_UNNAMED"/>
-    <register name="TBLw" group="SPR"/>
-    <register name="TBUw" group="SPR"/>
+    <register name="TBL" group="SPR"/>
+    <register name="TBU" group="SPR"/>
     <register name="spr11e" group="SPR_UNNAMED"/>
     <register name="spr11f" rename="PVR" group="SPR"/>
 
@@ -445,22 +445,22 @@
     <register name="spr18e" group="SPR_UNNAMED"/>
     <register name="spr18f" group="SPR_UNNAMED"/>
 
-    <register name="spr190" rename="IVOR0" group="SPR"/>
-    <register name="spr191" rename="IVOR1" group="SPR"/>
-    <register name="spr192" rename="IVOR2" group="SPR"/>
-    <register name="spr193" rename="IVOR3" group="SPR"/>
-    <register name="spr194" rename="IVOR4" group="SPR"/>
-    <register name="spr195" rename="IVOR5" group="SPR"/>
-    <register name="spr196" rename="IVOR6" group="SPR"/>
-    <register name="spr197" rename="IVOR7" group="SPR"/>
-    <register name="spr198" rename="IVOR8" group="SPR"/>
-    <register name="spr199" rename="IVOR9" group="SPR"/>
-    <register name="spr19a" rename="IVOR10" group="SPR"/>
-    <register name="spr19b" rename="IVOR11" group="SPR"/>
-    <register name="spr19c" rename="IVOR12" group="SPR"/>
-    <register name="spr19d" rename="IVOR13" group="SPR"/>
-    <register name="spr19e" rename="IVOR14" group="SPR"/>
-    <register name="spr19f" rename="IVOR15" group="SPR"/>
+    <register name="spr190" group="SPR_UNNAMED"/>
+    <register name="spr191" group="SPR_UNNAMED"/>
+    <register name="spr192" group="SPR_UNNAMED"/>
+    <register name="spr193" group="SPR_UNNAMED"/>
+    <register name="spr194" group="SPR_UNNAMED"/>
+    <register name="spr195" group="SPR_UNNAMED"/>
+    <register name="spr196" group="SPR_UNNAMED"/>
+    <register name="spr197" group="SPR_UNNAMED"/>
+    <register name="spr198" group="SPR_UNNAMED"/>
+    <register name="spr199" group="SPR_UNNAMED"/>
+    <register name="spr19a" group="SPR_UNNAMED"/>
+    <register name="spr19b" group="SPR_UNNAMED"/>
+    <register name="spr19c" group="SPR_UNNAMED"/>
+    <register name="spr19d" group="SPR_UNNAMED"/>
+    <register name="spr19e" group="SPR_UNNAMED"/>
+    <register name="spr19f" group="SPR_UNNAMED"/>
 
     <register name="spr1a0" group="SPR_UNNAMED"/>
     <register name="spr1a1" group="SPR_UNNAMED"/>
@@ -615,22 +615,22 @@
     <register name="spr22e" group="SPR_UNNAMED"/>
     <register name="spr22f" group="SPR_UNNAMED"/>
 
-    <register name="spr230" rename="IC_CSR" group="SPR"/>
-    <register name="spr231" rename="IC_ADR" group="SPR"/>
-    <register name="spr232" rename="IC_DAT" group="SPR"/>
-    <register name="spr233" group="SPR_UNNAMED"/>
-    <register name="spr234" group="SPR_UNNAMED"/>
-    <register name="spr235" group="SPR_UNNAMED"/>
-    <register name="spr236" group="SPR_UNNAMED"/>
-    <register name="spr237" group="SPR_UNNAMED"/>
-    <register name="spr238" rename="DC_CST" group="SPR"/>
-    <register name="spr239" rename="DC_ADR" group="SPR"/>
-    <register name="spr23a" rename="DC_DAT" group="SPR"/>
-    <register name="spr23b" group="SPR_UNNAMED"/>
-    <register name="spr23c" group="SPR_UNNAMED"/>
-    <register name="spr23d" group="SPR_UNNAMED"/>
-    <register name="spr23e" group="SPR_UNNAMED"/>
-    <register name="spr23f" group="SPR_UNNAMED"/>
+    <register name="spr230" rename="IBAT4U" group="SPR"/>
+    <register name="spr231" rename="IBAT4L" group="SPR"/>
+    <register name="spr232" rename="IBAT5U" group="SPR"/>
+    <register name="spr233" rename="IBAT5L" group="SPR"/>
+    <register name="spr234" rename="IBAT6U" group="SPR"/>
+    <register name="spr235" rename="IBAT6L" group="SPR"/>
+    <register name="spr236" rename="IBAT7U" group="SPR"/>
+    <register name="spr237" rename="IBAT7L" group="SPR"/>
+    <register name="spr238" rename="DBAT4U" group="SPR"/>
+    <register name="spr239" rename="DBAT4L" group="SPR"/>
+    <register name="spr23a" rename="DBAT5U" group="SPR"/>
+    <register name="spr23b" rename="DBAT5L" group="SPR"/>
+    <register name="spr23c" rename="DBAT6U" group="SPR"/>
+    <register name="spr23d" rename="DBAT6L" group="SPR"/>
+    <register name="spr23e" rename="DBAT7U" group="SPR"/>
+    <register name="spr23f" rename="DBAT7L" group="SPR"/>
 
     <register name="spr240" group="SPR_UNNAMED"/>
     <register name="spr241" group="SPR_UNNAMED"/>
@@ -689,15 +689,15 @@
     <register name="spr273" group="SPR_UNNAMED"/>
     <register name="spr274" group="SPR_UNNAMED"/>
     <register name="spr275" group="SPR_UNNAMED"/>
-    <register name="spr276" rename="DPDR" group="SPR"/>
-    <register name="spr277" rename="DPIR" group="SPR"/>
+    <register name="spr276" group="SPR_UNNAMED"/>
+    <register name="spr277" group="SPR_UNNAMED"/>
     <register name="spr278" group="SPR_UNNAMED"/>
     <register name="spr279" group="SPR_UNNAMED"/>
     <register name="spr27a" group="SPR_UNNAMED"/>
     <register name="spr27b" group="SPR_UNNAMED"/>
     <register name="spr27c" group="SPR_UNNAMED"/>
     <register name="spr27d" group="SPR_UNNAMED"/>
-    <register name="spr27e" rename="IMMR" group="SPR"/>
+    <register name="spr27e" group="SPR_UNNAMED"/>
     <register name="spr27f" group="SPR_UNNAMED"/>
 
     <register name="spr280" group="SPR_UNNAMED"/>
@@ -847,16 +847,16 @@
     <register name="spr308" group="SPR_UNNAMED"/>
     <register name="spr309" group="SPR_UNNAMED"/>
     <register name="spr30a" group="SPR_UNNAMED"/>
-    <register name="spr30b" rename="SDA" group="SPR"/>
+    <register name="spr30b" group="SPR_UNNAMED"/>
     <register name="spr30c" group="SPR_UNNAMED"/>
     <register name="spr30d" group="SPR_UNNAMED"/>
     <register name="spr30e" group="SPR_UNNAMED"/>
     <register name="spr30f" group="SPR_UNNAMED"/>
 
-    <register name="spr310" rename="MI_CTR" group="SPR"/>
+    <register name="spr310" group="SPR_UNNAMED"/>
     <register name="spr311" group="SPR_UNNAMED"/>
-    <register name="spr312" rename="MI_AP" group="SPR"/>
-    <register name="spr313" rename="MI_EPN" group="SPR"/>
+    <register name="spr312" group="SPR_UNNAMED"/>
+    <register name="spr313" group="SPR_UNNAMED"/>
     <register name="spr314" group="SPR_UNNAMED"/>
     <register name="spr315" rename="MI_TWC" group="SPR"/>
     <register name="spr316" rename="MI_RPN" group="SPR"/>
@@ -885,19 +885,19 @@
     <register name="spr32c" group="SPR_UNNAMED"/>
     <register name="spr32d" group="SPR_UNNAMED"/>
     <register name="spr32e" group="SPR_UNNAMED"/>
-    <register name="TAR" group="SPR"/>
+    <register name="spr32f" group="SPR_UNNAMED"/>
 
-    <register name="spr330" rename="MI_CAM" group="SPR"/>
-    <register name="spr331" rename="MIram0" group="SPR"/>
-    <register name="spr332" rename="MIram1" group="SPR"/>
+    <register name="spr330" group="SPR_UNNAMED"/>
+    <register name="spr331" group="SPR_UNNAMED"/>
+    <register name="spr332" group="SPR_UNNAMED"/>
     <register name="spr333" group="SPR_UNNAMED"/>
     <register name="spr334" group="SPR_UNNAMED"/>
     <register name="spr335" group="SPR_UNNAMED"/>
     <register name="spr336" group="SPR_UNNAMED"/>
     <register name="spr337" group="SPR_UNNAMED"/>
-    <register name="spr338" rename="MD_CAM" group="SPR"/>
-    <register name="spr339" rename="MDram0" group="SPR"/>
-    <register name="spr33a" rename="MDram1" group="SPR"/>
+    <register name="spr338" group="SPR_UNNAMED"/>
+    <register name="spr339" group="SPR_UNNAMED"/>
+    <register name="spr33a" group="SPR_UNNAMED"/>
     <register name="spr33b" group="SPR_UNNAMED"/>
     <register name="spr33c" group="SPR_UNNAMED"/>
     <register name="spr33d" group="SPR_UNNAMED"/>
@@ -972,18 +972,18 @@
     <register name="spr37e" group="SPR_UNNAMED"/>
     <register name="spr37f" group="SPR_UNNAMED"/>
 
-    <register name="spr380" group="SPR_UNNAMED"/>
-    <register name="spr381" group="SPR_UNNAMED"/>
-    <register name="spr382" group="SPR_UNNAMED"/>
-    <register name="spr383" group="SPR_UNNAMED"/>
-    <register name="spr384" group="SPR_UNNAMED"/>
-    <register name="spr385" group="SPR_UNNAMED"/>
-    <register name="spr386" group="SPR_UNNAMED"/>
-    <register name="spr387" group="SPR_UNNAMED"/>
-    <register name="spr388" group="SPR_UNNAMED"/>
-    <register name="spr389" group="SPR_UNNAMED"/>
-    <register name="spr38a" group="SPR_UNNAMED"/>
-    <register name="spr38b" group="SPR_UNNAMED"/>
+    <register name="spr380" rename="UGQR0" group="SPR"/>
+    <register name="spr381" rename="UGQR1" group="SPR"/>
+    <register name="spr382" rename="UGQR2" group="SPR"/>
+    <register name="spr383" rename="UGQR3" group="SPR"/>
+    <register name="spr384" rename="UGQR4" group="SPR"/>
+    <register name="spr385" rename="UGQR5" group="SPR"/>
+    <register name="spr386" rename="UGQR6" group="SPR"/>
+    <register name="spr387" rename="UGQR7" group="SPR"/>
+    <register name="spr388" rename="UHID2" group="SPR"/>
+    <register name="spr389" rename="UWPAR" group="SPR"/>
+    <register name="spr38a" rename="UDMAU" group="SPR"/>
+    <register name="spr38b" rename="UDMAL" group="SPR"/>
     <register name="spr38c" group="SPR_UNNAMED"/>
     <register name="spr38d" group="SPR_UNNAMED"/>
     <register name="spr38e" group="SPR_UNNAMED"/>
@@ -1021,16 +1021,16 @@
     <register name="spr3ac" rename="UMMCR1" group="SPR"/>
     <register name="spr3ad" rename="UPMC3" group="SPR"/>
     <register name="spr3ae" rename="UPMC4" group="SPR"/>
-    <register name="spr3af" group="SPR_UNNAMED"/>
+    <register name="spr3af" rename="USDA" group="SPR"/>
 
-    <register name="spr3b0" rename="ZPR" group="SPR"/>
-    <register name="spr3b1" rename="PID" group="SPR"/>
-    <register name="spr3b2" group="SPR_UNNAMED"/>
-    <register name="spr3b3" rename="CCR0" group="SPR"/>
-    <register name="spr3b4" rename="IAC3" group="SPR"/>
-    <register name="spr3b5" rename="IAC4" group="SPR"/>
-    <register name="spr3b6" rename="DVC1" group="SPR"/>
-    <register name="spr3b7" rename="DVC2" group="SPR"/>
+    <register name="spr3b0" rename="HID5" group="SPR"/>
+    <register name="spr3b1" group="SPR_UNNAMED"/>
+    <register name="spr3b2" rename="PCSR" group="SPR"/>
+    <register name="spr3b3" group="SPR_UNNAMED"/>
+    <register name="spr3b4" group="SPR_UNNAMED"/>
+    <register name="spr3b5" group="SPR_UNNAMED"/>
+    <register name="spr3b6" group="SPR_UNNAMED"/>
+    <register name="spr3b7" group="SPR_UNNAMED"/>
     <register name="spr3b8" rename="MMCR0" group="SPR"/>
     <register name="spr3b9" rename="PMC1" group="SPR"/>
     <register name="spr3ba" rename="PMC2" group="SPR"/>
@@ -1038,7 +1038,7 @@
     <register name="spr3bc" rename="MMCR1" group="SPR"/>
     <register name="spr3bd" rename="PMC3" group="SPR"/>
     <register name="spr3be" rename="PMC4" group="SPR"/>
-    <register name="spr3bf" group="SPR_UNNAMED"/>
+    <register name="spr3bf" rename="SDA" group="SPR"/>
 
     <register name="spr3c0" group="SPR_UNNAMED"/>
     <register name="spr3c1" group="SPR_UNNAMED"/>
@@ -1060,19 +1060,19 @@
     <register name="spr3d0" group="SPR_UNNAMED"/>
     <register name="spr3d1" group="SPR_UNNAMED"/>
     <register name="spr3d2" group="SPR_UNNAMED"/>
-    <register name="spr3d3" rename="ICDBDR" group="SPR"/>
-    <register name="spr3d4" rename="ESR" group="SPR"/>
-    <register name="spr3d5" rename="DEAR" group="SPR"/>
-    <register name="spr3d6" rename="EVPR" group="SPR"/>
-    <register name="spr3d7" rename="CDBCR" group="SPR"/>
-    <register name="spr3d8" rename="TSR" group="SPR"/>
+    <register name="spr3d3" group="SPR_UNNAMED"/>
+    <register name="spr3d4" group="SPR_UNNAMED"/>
+    <register name="spr3d5" group="SPR_UNNAMED"/>
+    <register name="spr3d6" group="SPR_UNNAMED"/>
+    <register name="spr3d7" group="SPR_UNNAMED"/>
+    <register name="spr3d8" group="SPR_UNNAMED"/>
     <register name="spr3d9" group="SPR_UNNAMED"/>
-    <register name="spr3da" rename="TCR" group="SPR"/>
-    <register name="spr3db" rename="PIT" group="SPR"/>
-    <register name="spr3dc" rename="TBHI" group="SPR"/>
-    <register name="spr3dd" rename="TBLO" group="SPR"/>
-    <register name="spr3de" rename="SRR2" group="SPR"/>
-    <register name="spr3df" rename="SRR3" group="SPR"/>
+    <register name="spr3da" group="SPR_UNNAMED"/>
+    <register name="spr3db" group="SPR_UNNAMED"/>
+    <register name="spr3dc" group="SPR_UNNAMED"/>
+    <register name="spr3dd" group="SPR_UNNAMED"/>
+    <register name="spr3de" group="SPR_UNNAMED"/>
+    <register name="spr3df" group="SPR_UNNAMED"/>
 
     <register name="spr3e0" group="SPR_UNNAMED"/>
     <register name="spr3e1" group="SPR_UNNAMED"/>
@@ -1089,23 +1089,23 @@
     <register name="spr3ec" group="SPR_UNNAMED"/>
     <register name="spr3ed" group="SPR_UNNAMED"/>
     <register name="spr3ee" group="SPR_UNNAMED"/>
-    <register name="spr3ef" group="SPR_UNNAMED"/>
+    <register name="spr3ef" rename="UPIR" group="SPR"/>
 
     <register name="spr3f0" rename="HID0" group="SPR"/>
     <register name="spr3f1" rename="HID1" group="SPR"/>
     <register name="spr3f2" rename="IABR" group="SPR"/>
-    <register name="spr3f3" group="SPR_UNNAMED"/>
-    <register name="spr3f4" rename="IAC1" group="SPR"/>
+    <register name="spr3f3" rename="HID4" group="SPR"/>
+    <register name="spr3f4" group="SPR_UNNAMED"/>
     <register name="spr3f5" rename="DABR" group="SPR"/>
-    <register name="spr3f6" rename="DAC1" group="SPR"/>
-    <register name="spr3f7" rename="DAC2" group="SPR"/>
-    <register name="spr3f8" rename="BUSCSR" group="SPR"/>
+    <register name="spr3f6" group="SPR_UNNAMED"/>
+    <register name="spr3f7" group="SPR_UNNAMED"/>
+    <register name="spr3f8" group="SPR_UNNAMED"/>
     <register name="spr3f9" rename="L2CR" group="SPR"/>
-    <register name="spr3fa" rename="DCCR" group="SPR"/>
+    <register name="spr3fa" group="SPR_UNNAMED"/>
     <register name="spr3fb" rename="ICTC" group="SPR"/>
-    <register name="spr3fc" rename="THRM1" group="SPR"/>
-    <register name="spr3fd" rename="THRM2" group="SPR"/>
-    <register name="spr3fe" rename="THRM3" group="SPR"/>
+    <register name="spr3fc" group="SPR_UNNAMED"/>
+    <register name="spr3fd" group="SPR_UNNAMED"/>
+    <register name="spr3fe" group="SPR_UNNAMED"/>
     <register name="spr3ff" rename="PIR" group="SPR"/>
 
     <register name="dcr090" rename="BEAR" group="DCR"/>
