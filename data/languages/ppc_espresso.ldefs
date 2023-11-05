@@ -6,12 +6,12 @@
             size="32"
             variant="Gekko/Broadway/Espresso"
             version="1.5"
-            slafile="ppc_gekko_broadway.sla"
-            processorspec="ppc_gekko_broadway.pspec"
+            slafile="ppc_espresso.sla"
+            processorspec="ppc_espresso.pspec"
             manualindexfile="../manuals/PowerPC.idx"
             id="PowerPC:BE:32:Gekko_Broadway_Espresso">
-    <description>PowerPC 32-bit big endian (Gekko/Broadway/Espresso variant)</description>
-    <compiler name="default" spec="ppc_gekko_broadway.cspec" id="default"/>
+    <description>PowerPC 32-bit big endian (Espresso variant)</description>
+    <compiler name="default" spec="ppc_espresso.cspec" id="default"/>
     <external_name tool="gnu" name="powerpc:common"/>
     <external_name tool="IDA-PRO" name="ppc"/>
     <external_name tool="DWARF.register.mapping.file" name="ppc.dwarf"/>
