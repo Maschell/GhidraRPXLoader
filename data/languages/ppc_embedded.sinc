@@ -163,8 +163,8 @@
 
 :rfci				is $(NOTVLE) & OP=19 & BITS_21_25=0 & BITS_16_20=0 & BITS_11_15=0 & XOP_1_10=51 & BIT_0=0
 {
-	MSR = returnFromCriticalInterrupt(MSR, CSRR1);
-	local ra = CSRR0;
+	MSR = returnFromCriticalInterrupt(MSR, spr03b);
+	local ra = spr03a;
 	return[ra];
 
 }

@@ -62,7 +62,7 @@ define register offset=0x1000 size=$(REGISTER_SIZE)
 	[ spr000 XER    spr002 spr003 spr004 spr005 spr006 spr007 LR     CTR    spr00a spr00b spr00c spr00d spr00e spr00f 
 	  spr010 spr011 spr012 spr013 spr014 spr015 spr016 spr017 spr018 spr019 SRR0   SRR1   spr01c spr01d spr01e spr01f 
 	  spr020 spr021 spr022 spr023 spr024 spr025 spr026 spr027 spr028 spr029 spr02a spr02b spr02c spr02d spr02e spr02f
-	  spr030 spr031 spr032 spr033 spr034 spr035 spr036 spr037 spr038 spr039 CSRR0  CSRR1  spr03c spr03d spr03e spr03f
+	  spr030 spr031 spr032 spr033 spr034 spr035 spr036 spr037 spr038 spr039 spr03a spr03b spr03c spr03d spr03e spr03f
 	  spr040 spr041 spr042 spr043 spr044 spr045 spr046 spr047 spr048 spr049 spr04a spr04b spr04c spr04d spr04e spr04f
 	  spr050 spr051 spr052 spr053 spr054 spr055 spr056 spr057 spr058 spr059 spr05a spr05b spr05c spr05d spr05e spr05f
 	  spr060 spr061 spr062 spr063 spr064 spr065 spr066 spr067 spr068 spr069 spr06a spr06b spr06c spr06d spr06e spr06f
@@ -76,7 +76,7 @@ define register offset=0x1000 size=$(REGISTER_SIZE)
 	  spr0e0 spr0e1 spr0e2 spr0e3 spr0e4 spr0e5 spr0e6 spr0e7 spr0e8 spr0e9 spr0ea spr0eb spr0ec spr0ed spr0ee spr0ef
 	  spr0f0 spr0f1 spr0f2 spr0f3 spr0f4 spr0f5 spr0f6 spr0f7 spr0f8 spr0f9 spr0fa spr0fb spr0fc spr0fd spr0fe spr0ff
 	  spr100 spr101 spr102 spr103 spr104 spr105 spr106 spr107 spr108 spr109 spr10a spr10b TBLr   TBUr   spr10e spr10f
-	  spr110 spr111 spr112 spr113 spr114 spr115 spr116 spr117 spr118 spr119 spr11a spr11b TBLw   TBUw	spr11e spr11f   
+	  spr110 spr111 spr112 spr113 spr114 spr115 spr116 spr117 spr118 spr119 spr11a spr11b TBL    TBU    spr11e spr11f
 	  spr120 spr121 spr122 spr123 spr124 spr125 spr126 spr127 spr128 spr129 spr12a spr12b spr12c spr12d spr12e spr12f
 	  spr130 spr131 spr132 spr133 spr134 spr135 spr136 spr137 spr138 spr139 spr13a spr13b spr13c spr13d spr13e spr13f
 	  spr140 spr141 spr142 spr143 spr144 spr145 spr146 spr147 spr148 spr149 spr14a spr14b spr14c spr14d spr14e spr14f
@@ -109,14 +109,14 @@ define register offset=0x1000 size=$(REGISTER_SIZE)
 	  spr2f0 spr2f1 spr2f2 spr2f3 spr2f4 spr2f5 spr2f6 spr2f7 spr2f8 spr2f9 spr2fa spr2fb spr2fc spr2fd spr2fe spr2ff
 	  spr300 spr301 spr302 spr303 spr304 spr305 spr306 spr307 spr308 spr309 spr30a spr30b spr30c spr30d spr30e spr30f
 	  spr310 spr311 spr312 spr313 spr314 spr315 spr316 spr317 spr318 spr319 spr31a spr31b spr31c spr31d spr31e spr31f
-	  spr320 spr321 spr322 spr323 spr324 spr325 spr326 spr327 spr328 spr329 spr32a spr32b spr32c spr32d spr32e TAR
+	  spr320 spr321 spr322 spr323 spr324 spr325 spr326 spr327 spr328 spr329 spr32a spr32b spr32c spr32d spr32e spr32f
 	  spr330 spr331 spr332 spr333 spr334 spr335 spr336 spr337 spr338 spr339 spr33a spr33b spr33c spr33d spr33e spr33f
 	  spr340 spr341 spr342 spr343 spr344 spr345 spr346 spr347 spr348 spr349 spr34a spr34b spr34c spr34d spr34e spr34f
 	  spr350 spr351 spr352 spr353 spr354 spr355 spr356 spr357 spr358 spr359 spr35a spr35b spr35c spr35d spr35e spr35f
 	  spr360 spr361 spr362 spr363 spr364 spr365 spr366 spr367 spr368 spr369 spr36a spr36b spr36c spr36d spr36e spr36f
 	  spr370 spr371 spr372 spr373 spr374 spr375 spr376 spr377 spr378 spr379 spr37a spr37b spr37c spr37d spr37e spr37f
 	  spr380 spr381 spr382 spr383 spr384 spr385 spr386 spr387 spr388 spr389 spr38a spr38b spr38c spr38d spr38e spr38f
-	  GQR0   GQR1   GQR2   GQR3   GQR4   GQR5   GQR6   GQR7    spr398 spr399 spr39a spr39b spr39c spr39d spr39e spr39f
+	  GQR0   GQR1   GQR2   GQR3   GQR4   GQR5   GQR6   GQR7   spr398 spr399 spr39a spr39b spr39c spr39d spr39e spr39f
 	  spr3a0 spr3a1 spr3a2 spr3a3 spr3a4 spr3a5 spr3a6 spr3a7 spr3a8 spr3a9 spr3aa spr3ab spr3ac spr3ad spr3ae spr3af
 	  spr3b0 spr3b1 spr3b2 spr3b3 spr3b4 spr3b5 spr3b6 spr3b7 spr3b8 spr3b9 spr3ba spr3bb spr3bc spr3bd spr3be spr3bf
 	  spr3c0 spr3c1 spr3c2 spr3c3 spr3c4 spr3c5 spr3c6 spr3c7 spr3c8 spr3c9 spr3ca spr3cb spr3cc spr3cd spr3ce spr3cf
@@ -631,7 +631,7 @@ attach variables SPRVAL [
 	spr00c	spr02c	spr04c	spr06c	spr08c	spr0ac	spr0cc	spr0ec	TBLr	spr12c	spr14c	spr16c	spr18c	spr1ac	spr1cc	spr1ec	spr20c	spr22c	spr24c	spr26c	spr28c	spr2ac	spr2cc	spr2ec	spr30c  spr32c	spr34c	spr36c	spr38c	spr3ac	spr3cc	spr3ec
 	spr00d	spr02d	spr04d	spr06d	spr08d	spr0ad	spr0cd	spr0ed	TBUr	spr12d	spr14d	spr16d	spr18d	spr1ad	spr1cd	spr1ed	spr20d	spr22d	spr24d	spr26d	spr28d	spr2ad	spr2cd	spr2ed	spr30d  spr32d	spr34d	spr36d	spr38d	spr3ad	spr3cd	spr3ed
 	spr00e	spr02e	spr04e	spr06e	spr08e	spr0ae	spr0ce	spr0ee	spr10e	spr12e	spr14e	spr16e	spr18e	spr1ae	spr1ce	spr1ee	spr20e	spr22e	spr24e	spr26e	spr28e	spr2ae	spr2ce	spr2ee	spr30e	spr32e	spr34e	spr36e	spr38e	spr3ae	spr3ce	spr3ee
-	spr00f	spr02f	spr04f	spr06f	spr08f	spr0af	spr0cf	spr0ef	spr10f	spr12f	spr14f	spr16f	spr18f	spr1af	spr1cf	spr1ef	spr20f	spr22f	spr24f	spr26f	spr28f	spr2af	spr2cf	spr2ef	spr30f	TAR	 	spr34f	spr36f	spr38f	spr3af	spr3cf	spr3ef
+	spr00f	spr02f	spr04f	spr06f	spr08f	spr0af	spr0cf	spr0ef	spr10f	spr12f	spr14f	spr16f	spr18f	spr1af	spr1cf	spr1ef	spr20f	spr22f	spr24f	spr26f	spr28f	spr2af	spr2cf	spr2ef	spr30f	spr32f	spr34f	spr36f	spr38f	spr3af	spr3cf	spr3ef
 	spr010	spr030	spr050  spr070	spr090	spr0b0	spr0d0	spr0f0	spr110	spr130	spr150	spr170	spr190	spr1b0	spr1d0	spr1f0	spr210	spr230	spr250	spr270	spr290	spr2b0	spr2d0	spr2f0	spr310	spr330	spr350	spr370	GQR0   	spr3b0 	spr3d0	spr3f0
 	spr011	spr031	spr051  spr071	spr091	spr0b1	spr0d1	spr0f1	spr111	spr131	spr151	spr171	spr191	spr1b1	spr1d1	spr1f1	spr211	spr231	spr251	spr271	spr291	spr2b1	spr2d1	spr2f1	spr311	spr331	spr351	spr371	GQR1   	spr3b1 	spr3d1	spr3f1
 	spr012	spr032	spr052  spr072	spr092	spr0b2	spr0d2	spr0f2	spr112	spr132	spr152	spr172	spr192	spr1b2	spr1d2	spr1f2	spr212	spr232	spr252	spr272	spr292	spr2b2	spr2d2	spr2f2	spr312	spr332	spr352	spr372	GQR2   	spr3b2	spr3d2	spr3f2
@@ -642,10 +642,10 @@ attach variables SPRVAL [
 	spr017	spr037	spr057	spr077	spr097	spr0b7	spr0d7	spr0f7	spr117	spr137	spr157	spr177	spr197	spr1b7	spr1d7	spr1f7	spr217	spr237	spr257	spr277	spr297	spr2b7	spr2d7	spr2f7	spr317	spr337	spr357	spr377	GQR7   	spr3b7	spr3d7	spr3f7
 	spr018	spr038	spr058	spr078	spr098	spr0b8	spr0d8	spr0f8	spr118  spr138	spr158	spr178	spr198	spr1b8	spr1d8	spr1f8	spr218	spr238	spr258	spr278	spr298	spr2b8	spr2d8	spr2f8	spr318	spr338	spr358	spr378	spr398	spr3b8  spr3d8 	spr3f8
     spr019	spr039	spr059	spr079	spr099	spr0b9	spr0d9	spr0f9	spr119	spr139	spr159	spr179	spr199	spr1b9	spr1d9	spr1f9	spr219	spr239	spr259	spr279	spr299	spr2b9	spr2d9	spr2f9	spr319	spr339	spr359	spr379	spr399	spr3b9  spr3d9	spr3f9
-	SRR0 	CSRR0 	spr05a	spr07a	spr09a	spr0ba	spr0da	spr0fa	spr11a  spr13a	spr15a	spr17a	spr19a	spr1ba	spr1da	spr1fa	spr21a	spr23a	spr25a	spr27a	spr29a	spr2ba	spr2da	spr2fa	spr31a	spr33a	spr35a	spr37a	spr39a	spr3ba	spr3da 	spr3fa
-	SRR1	CSRR1 	spr05b	spr07b	spr09b	spr0bb	spr0db	spr0fb	spr11b	spr13b	spr15b	spr17b	spr19b	spr1bb	spr1db	spr1fb	spr21b	spr23b	spr25b	spr27b	spr29b	spr2bb	spr2db	spr2fb	spr31b	spr33b	spr35b	spr37b	spr39b	spr3bb	spr3db 	spr3fb
-	spr01c	spr03c	spr05c	spr07c	spr09c	spr0bc	spr0dc	spr0fc	TBLw    spr13c	spr15c	spr17c	spr19c	spr1bc	spr1dc	spr1fc	spr21c	spr23c	spr25c	spr27c	spr29c	spr2bc	spr2dc	spr2fc	spr31c	spr33c	spr35c	spr37c	spr39c	spr3bc	spr3dc	spr3fc
-	spr01d	spr03d	spr05d	spr07d	spr09d	spr0bd	spr0dd	spr0fd	TBUw    spr13d	spr15d	spr17d	spr19d	spr1bd	spr1dd	spr1fd	spr21d	spr23d	spr25d	spr27d	spr29d	spr2bd	spr2dd	spr2fd	spr31d	spr33d	spr35d	spr37d	spr39d	spr3bd	spr3dd	spr3fd
+	SRR0 	spr03a 	spr05a	spr07a	spr09a	spr0ba	spr0da	spr0fa	spr11a  spr13a	spr15a	spr17a	spr19a	spr1ba	spr1da	spr1fa	spr21a	spr23a	spr25a	spr27a	spr29a	spr2ba	spr2da	spr2fa	spr31a	spr33a	spr35a	spr37a	spr39a	spr3ba	spr3da 	spr3fa
+	SRR1	spr03b 	spr05b	spr07b	spr09b	spr0bb	spr0db	spr0fb	spr11b	spr13b	spr15b	spr17b	spr19b	spr1bb	spr1db	spr1fb	spr21b	spr23b	spr25b	spr27b	spr29b	spr2bb	spr2db	spr2fb	spr31b	spr33b	spr35b	spr37b	spr39b	spr3bb	spr3db 	spr3fb
+	spr01c	spr03c	spr05c	spr07c	spr09c	spr0bc	spr0dc	spr0fc	TBL     spr13c	spr15c	spr17c	spr19c	spr1bc	spr1dc	spr1fc	spr21c	spr23c	spr25c	spr27c	spr29c	spr2bc	spr2dc	spr2fc	spr31c	spr33c	spr35c	spr37c	spr39c	spr3bc	spr3dc	spr3fc
+	spr01d	spr03d	spr05d	spr07d	spr09d	spr0bd	spr0dd	spr0fd	TBU     spr13d	spr15d	spr17d	spr19d	spr1bd	spr1dd	spr1fd	spr21d	spr23d	spr25d	spr27d	spr29d	spr2bd	spr2dd	spr2fd	spr31d	spr33d	spr35d	spr37d	spr39d	spr3bd	spr3dd	spr3fd
 	spr01e	spr03e	spr05e	spr07e	spr09e  spr0be	spr0de	spr0fe	spr11e	spr13e	spr15e	spr17e	spr19e	spr1be	spr1de	spr1fe	spr21e	spr23e	spr25e	spr27e	spr29e	spr2be	spr2de	spr2fe	spr31e	spr33e	spr35e	spr37e	spr39e	spr3be	spr3de	spr3fe
 	spr01f	spr03f	spr05f	spr07f	spr09f	spr0bf	spr0df	spr0ff	spr11f  spr13f	spr15f	spr17f	spr19f	spr1bf	spr1df	spr1ff	spr21f	spr23f	spr25f	spr27f	spr29f	spr2bf	spr2df	spr2ff	spr31f	spr33f	spr35f	spr37f	spr39f	spr3bf	spr3df	spr3ff
 ];
