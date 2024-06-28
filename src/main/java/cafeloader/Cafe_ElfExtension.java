@@ -311,7 +311,7 @@ public class Cafe_ElfExtension extends ElfExtension {
 				Address tagAddress = fileInfoAddr.add(tagOffset);
 				while (true) {
 					Data d = elfLoadHelper.createData(tagAddress, TerminatedStringDataType.dataType);
-					if (d == null || d.getLength() <= 1) { // empty string has a length of 1 (just a null terminator)
+					if (d == null || d.getLength() == 0 || (d.hasStringValue() && ((String)d.getValue()).isEmpty())) {
 						break;
 					}
 					tagAddress = tagAddress.add(d.getLength());
