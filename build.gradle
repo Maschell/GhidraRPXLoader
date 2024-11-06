@@ -45,7 +45,6 @@ def getGitHash = {
 }
 
 wrapper {
-    gradleVersion = '7.5.1'
     gradleVersion = '8.10.2'
     distributionType = Wrapper.DistributionType.BIN
 }
@@ -61,14 +60,13 @@ configurations {
 dependencies {
     implementation fileTree(dir: ghidraInstallDir + '/Ghidra/Processors', include: "**/*.jar")
     localDeps group: 'org.lz4', name: 'lz4-java', version: '1.5.1'
-    implementation configurations.localDeps
 }
 
 buildExtension {
-    baseName "${project.name}-${project.version}-${getGitHash()}-Ghidra_${ghidra_version}".replace(' ', '_')
-    extension 'zip'
-    destinationDir DISTRIBUTION_DIR
-    version ''
+    archiveBaseName = "${project.name}-${project.version}-${getGitHash()}-Ghidra_${ghidra_version}".replace(' ', '_')
+    archiveExtension = 'zip'
+    destinationDirectory = DISTRIBUTION_DIR
+    archiveVersion = ''
     
     // Make sure that we don't try to copy the same file with the same path into the
     // zip (this can happen!)
@@ -121,7 +119,7 @@ buildExtension {
     }
 
     doLast {
-        println "\nCreated " + baseName + "." + extension + " in " + destinationDir
+        println "\nCreated " + archiveBaseName + "." + archiveExtension + " in " + destinationDirectory
     }
 }
 
