@@ -311,11 +311,10 @@ public class Cafe_ElfExtension extends ElfExtension {
 				Address tagAddress = fileInfoAddr.add(tagOffset);
 				while (true) {
 					Data d = elfLoadHelper.createData(tagAddress, TerminatedStringDataType.dataType);
-					int length = d.getLength();
-					if (length == 0) {
+					if (d == null || d.getLength() == 0 || (d.hasStringValue() && ((String)d.getValue()).isEmpty())) {
 						break;
 					}
-					tagAddress = tagAddress.add(length);
+					tagAddress = tagAddress.add(d.getLength());
 				}
 			} catch (AddressOutOfBoundsException e) {
 			}
