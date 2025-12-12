@@ -1,6 +1,6 @@
 # Ghidra RPX/RPL loader
 
-This is a simple extension to open .rpx and .rpl files with `Ghidra 10.4`.
+This is a simple extension to open .rpx and .rpl files with `Ghidra 11.0+`.
 
 The loader includes the Gekko/Broadway/Espresso processor definitions that are based on the [Ghidra-GameCube-Loader](https://github.com/Cuyler36/Ghidra-GameCube-Loader).
 
@@ -10,7 +10,7 @@ Imports in official .rpl/.rpx files may display as "func_xyz" instead of the fun
 
 ## Building
 
-- Ensure you have ``JAVA_HOME`` set to the path of your JDK 17 installation.
+- Ensure you have ``JAVA_HOME`` set to the path of your JDK 21 installation.
 - Set ``GHIDRA_INSTALL_DIR`` to your Ghidra install directory. This can be done in one of the following ways:
     - **Windows**: Running ``set GHIDRA_INSTALL_DIR=<Absolute path to Ghidra without quotations>``
     - **macos/Linux**: Running ``export GHIDRA_INSTALL_DIR=<Absolute path to Ghidra>``
