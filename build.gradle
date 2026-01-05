@@ -36,12 +36,9 @@ def DISTRIBUTION_DIR = file("dist")
 def PATH_IN_ZIP = "${project.name}"
 
 def getGitHash = {
-    def stdout = new ByteArrayOutputStream()
-    exec {
+    return providers.exec {
         commandLine 'git', 'rev-parse', '--short', 'HEAD'
-        standardOutput = stdout
-    }
-    return stdout.toString().trim()
+    }.standardOutput.asText.get().trim()
 }
 
 wrapper {
@@ -55,23 +52,24 @@ repositories {
 
 configurations {
     localDeps
+	implementation.extendsFrom localDeps
 }
 
 dependencies {
     implementation fileTree(dir: ghidraInstallDir + '/Ghidra/Processors', include: "**/*.jar")
-    localDeps group: 'org.lz4', name: 'lz4-java', version: '1.5.1'
-    implementation configurations.localDeps
+    localDeps 'org.lz4:lz4-java:1.5.1'
 }
 
 buildExtension {
-    baseName "${project.name}-${project.version}-${getGitHash()}-Ghidra_${ghidra_version}".replace(' ', '_')
-    extension 'zip'
-    destinationDir DISTRIBUTION_DIR
-    version ''
+    archiveBaseName.set("${project.name}-${project.version}-${getGitHash()}-Ghidra_${ghidra_version}".replace(' ', '_'))
+    archiveExtension.set('zip')
+    destinationDirectory.set(DISTRIBUTION_DIR)
+
+    archiveVersion.set('')
     
     // Make sure that we don't try to copy the same file with the same path into the
     // zip (this can happen!)
-    duplicatesStrategy 'exclude'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     
     // This filtered property file copy must appear before the general 
     // copy to ensure that it is prefered over the unmodified file
@@ -119,13 +117,13 @@ buildExtension {
         into PATH_IN_ZIP
     }
 
-    doLast {
-        println "\nCreated " + baseName + "." + extension + " in " + destinationDir
+	doLast {
+        println "\nCreated " + archiveBaseName.get() + "." + archiveExtension.get() + " in " + destinationDirectory.get().asFile
     }
 }
 
-tasks.withType(Copy).all { duplicatesStrategy 'exclude' }
+tasks.withType(Copy).all { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
 
 jar {
-   duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
